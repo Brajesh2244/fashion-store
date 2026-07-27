@@ -1,0 +1,190 @@
+/* =========================================================
+   ORDER SUCCESS PAGE (Tutor Dark-Theme Card Design)
+========================================================= */
+
+.success-page-body {
+    background-color: #1e1f22 !important; /* Slate Dark Gray Page Background */
+    color: #ffffff;
+}
+
+.success-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 40px 0;
+}
+
+.success-card {
+    width: 100%;
+    max-width: 580px;
+    background-color: #2b2d31; /* Charcoal Card Surface */
+    border-radius: 16px;
+    padding: 50px 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Green circular check badge */
+.success-icon-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: rgba(34, 197, 94, 0.15); /* Soft translucent green */
+    color: #22c55e; /* Emerald check icon */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 28px;
+    font-size: 20px;
+}
+
+.success-title {
+    font-family: var(--font-body); /* Sans-Serif font to match tutor style */
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.success-subtitle {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 35px;
+    line-height: 1.5;
+}
+
+/* Details Box Container with thin transparent borders */
+.details-box {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    padding: 8px 0;
+    text-align: left;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+}
+
+.detail-value {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.status-text {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.grand-total-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* Delivery details box style */
+.delivery-details-box {
+    padding: 24px;
+    text-align: left;
+}
+
+.delivery-details-box h3 {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 16px;
+    border: none;
+}
+
+.delivery-details-box p {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 6px;
+    line-height: 1.6;
+}
+
+.delivery-details-box p:last-child {
+    margin-bottom: 0;
+}
+
+.delivery-name {
+    font-weight: 600;
+}
+
+/* Action Buttons styled matching Faire ES (4px border-radius) */
+.success-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 35px;
+}
+
+.success-actions .btn {
+    flex: 1;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-btn) !important; /* 4px radius */
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.success-actions .btn-secondary {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.success-actions .btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.success-actions .btn-primary {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #ffffff;
+}
+
+.success-actions .btn-primary:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+    .success-card {
+        padding: 40px 20px;
+        margin: 20px;
+    }
+    .success-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

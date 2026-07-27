@@ -1,0 +1,186 @@
+/* =========================================================
+   PRODUCT DETAILS PAGE (Faire ES Minimal Design)
+========================================================= */
+
+.product-details-container {
+    display: flex;
+    gap: 60px;
+    background-color: var(--color-surface);
+    padding: 60px;
+    border-radius: var(--radius-btn);
+    margin: 40px auto;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-soft);
+}
+
+.product-image {
+    flex: 1.2;
+    text-align: center;
+}
+
+.product-image img {
+    width: 100%;
+    max-width: 520px;
+    border-radius: var(--radius-btn);
+    object-fit: cover;
+    border: 1px solid var(--color-border);
+}
+
+.product-info {
+    flex: 1;
+}
+
+.product-info h1 {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+}
+
+.product-info h3 {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 25px;
+}
+
+.product-info p {
+    font-family: var(--font-body);
+    color: var(--color-secondary);
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.price {
+    font-family: var(--font-body);
+    font-size: 32px;
+    color: var(--color-primary);
+    font-weight: 700;
+    margin-bottom: 35px;
+}
+
+.sizes {
+    margin: 20px 0 30px;
+}
+
+.sizes h4 {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-secondary);
+    margin-bottom: 10px;
+}
+
+.sizes select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    font-size: 15px;
+    outline: none;
+    transition: var(--transition);
+    background-color: var(--color-surface);
+}
+
+.sizes select:focus {
+    border-color: var(--color-primary);
+}
+
+.quantity-box {
+    margin: 25px 0 35px;
+}
+
+.quantity-box h4 {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-secondary);
+    margin-bottom: 10px;
+}
+
+.quantity-box input {
+    width: 90px;
+    height: 48px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    outline: none;
+    transition: var(--transition);
+}
+
+.quantity-box input:focus {
+    border-color: var(--color-primary);
+}
+
+.stock {
+    font-size: 14px;
+    font-weight: 600;
+    color: #22c55e;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stock::before {
+    content: "●";
+    font-size: 10px;
+}
+
+.out-stock {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-error);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.out-stock::before {
+    content: "●";
+    font-size: 10px;
+}
+
+/* Matte Black Primary Action Button with 4px radius */
+.cart-btn {
+    width: 100%;
+    height: 52px;
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.cart-btn:hover {
+    background-color: var(--color-secondary);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .product-details-container {
+        flex-direction: column;
+        padding: 40px;
+        gap: 40px;
+    }
+    .product-image img {
+        max-width: 100%;
+    }
+}

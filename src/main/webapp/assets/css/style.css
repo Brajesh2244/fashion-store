@@ -1,0 +1,386 @@
+/* =========================================================
+   LUXURY FASHION STORE DESIGN SYSTEM (style.css)
+========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Color Palette */
+    --color-bg: #EAEDED;            /* Cool Light Grey Background (Amazon Inspired) */
+    --color-surface: #ffffff;       /* Pure White Cards & Panels */
+    --color-primary: #111111;       /* Deep Black Text / Buttons */
+    --color-secondary: #6B7280;     /* Grey Secondary Text */
+    --color-accent: #C8A96A;        /* Premium Luxury Neutral Gold Accent */
+    --color-border: #E5E7EB;        /* Light Grey Borders */
+    
+    /* Fonts */
+    --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    
+    /* Spacing & Border Radius */
+    --radius-btn: 4px;              /* Grounded Rectangular CTA controls */
+    --radius-card: 12px;            /* Sleek Card Rounding */
+    --radius-pill: 40px;            /* Category nav pills */
+    
+    /* Shadows & Transitions */
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.02);
+    --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.05);
+    --transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* =========================================================
+   BASE STYLES & RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-body);
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+ul {
+    list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-primary);
+    line-height: 1.25;
+}
+
+/* =========================================================
+   GLOBAL UTILITIES
+========================================================= */
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 0;
+}
+
+.page-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 10%;
+    width: 80%;
+    height: 4px;
+    background-color: var(--color-accent);
+    z-index: -1;
+}
+
+/* =========================================================
+   STICKY STYLISH NAVBAR
+========================================================= */
+
+.navbar {
+    width: 100%;
+    height: 80px;
+    background-color: rgba(19, 25, 33, 0.92); /* Amazon Transparent Black */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    transition: var(--transition);
+}
+
+.navbar.navbar-solid {
+    background-color: rgba(19, 25, 33, 0.98); /* Solid Amazon dark color on scroll */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.logo a {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff; /* White Logo */
+    letter-spacing: -0.5px;
+}
+
+.search-bar {
+    width: 30%;
+    position: relative;
+}
+
+.search-bar form {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    width: 100%;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 0 15px 0 40px;
+    outline: none;
+    font-size: 14px;
+    transition: var(--transition);
+    background-color: #ffffff; /* Clean white input */
+    color: #111111;
+}
+
+.search-bar input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(200, 169, 106, 0.2);
+}
+
+.search-bar::before {
+    content: "\f002";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888888; /* Darker search icon on white input background */
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.search-bar button {
+    display: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.nav-links li a {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85); /* High-contrast white nav text */
+    letter-spacing: 0.02em;
+    position: relative;
+    padding: 6px 0;
+}
+
+.nav-links li a:hover {
+    color: var(--color-accent); /* Golden Highlight on Hover */
+}
+
+.nav-links li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.25s ease-out;
+}
+
+.nav-links li a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* =========================================================
+   BUTTON SYSTEM
+========================================================= */
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    border: 1px solid transparent;
+    text-align: center;
+    transition: var(--transition);
+    outline: none;
+    letter-spacing: 0.03em;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+}
+
+/* =========================================================
+   FORM ELEMENTS
+========================================================= */
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-secondary);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    font-size: 15px;
+    outline: none;
+    transition: var(--transition);
+    background-color: var(--color-surface);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+    background-color: var(--color-surface);
+    color: var(--color-secondary);
+    margin-top: 100px;
+    border-top: 1px solid var(--color-border);
+}
+
+.footer-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 60px;
+    padding: 80px 0;
+}
+
+.footer-section h2,
+.footer-section h3 {
+    font-family: var(--font-heading);
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.footer-section p {
+    color: var(--color-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.footer-section ul li {
+    margin-bottom: 12px;
+}
+
+.footer-section ul li a {
+    color: var(--color-secondary);
+    font-size: 14px;
+}
+
+.footer-section ul li a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+    padding: 30px;
+    color: var(--color-muted);
+    font-size: 13px;
+    background-color: var(--color-bg);
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+========================================================= */
+
+@media (max-width: 992px) {
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 20px 5%;
+        gap: 15px;
+    }
+    .search-bar {
+        width: 100%;
+    }
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    .footer-section .social-icons {
+        justify-content: center;
+    }
+}

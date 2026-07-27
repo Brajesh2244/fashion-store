@@ -1,0 +1,164 @@
+/* =========================================================
+   CART PAGE (Faire ES Minimal Design)
+========================================================= */
+
+.empty-cart {
+    text-align: center;
+    padding: 80px 40px;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-btn);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-soft);
+}
+
+.empty-cart h3 {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    color: var(--color-primary);
+    margin-bottom: 12px;
+}
+
+.empty-cart p {
+    color: var(--color-secondary);
+    margin-bottom: 24px;
+}
+
+/* Cart Table */
+.cart-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-btn);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.cart-table th {
+    background-color: #fcfbf9;
+    color: var(--color-secondary);
+    padding: 16px;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+}
+
+.cart-table td {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 15px;
+}
+
+.cart-table tr:last-child td {
+    border-bottom: none;
+}
+
+.cart-image {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: var(--radius-btn);
+    border: 1px solid var(--color-border);
+}
+
+/* Quantity controls in cell */
+.cart-table form {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qty-input {
+    width: 60px;
+    height: 38px;
+    text-align: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    outline: none;
+    font-size: 14px;
+}
+
+.qty-input:focus {
+    border-color: var(--color-primary);
+}
+
+.cart-table form .btn {
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Remove button */
+.remove-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: var(--transition);
+}
+
+.remove-btn:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    background-color: var(--color-bg);
+}
+
+/* Summary Box */
+.cart-summary {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 20px;
+    padding: 30px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    box-shadow: var(--shadow-soft);
+}
+
+.cart-summary h3 {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.cart-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.cart-buttons .btn {
+    padding: 14px 28px;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cart-table {
+        display: block;
+        overflow-x: auto;
+    }
+    .cart-summary {
+        align-items: stretch;
+    }
+    .cart-buttons {
+        flex-direction: column;
+    }
+}
