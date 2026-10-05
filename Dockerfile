@@ -16,9 +16,9 @@ FROM tomcat:10.1-jdk21-temurin
 RUN rm -rf /usr/local/tomcat/webapps/*
 
 # Deploy built WAR as ROOT application
-COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=build /app/target/FashionStore.war /usr/local/tomcat/webapps/ROOT.war
 
+ENV PORT=8080
 EXPOSE 8080
 
-# Dynamically bind Tomcat to $PORT injected by Railway/Render, fallback to 8080
-CMD ["sh", "-c", "sed -i 's/port=\"8080\"/port=\"'${PORT:-8080}'\"/g' /usr/local/tomcat/conf/server.xml && catalina.sh run"]
+CMD ["catalina.sh", "run"]
