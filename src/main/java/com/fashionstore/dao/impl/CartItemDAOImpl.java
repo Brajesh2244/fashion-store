@@ -358,4 +358,20 @@ public class CartItemDAOImpl implements CartItemDAO {
         return item;
     }
 
+    @Override
+    public int getCartItemCount(int cartId) {
+        String sql = "SELECT COUNT(*) FROM cart_items WHERE cart_id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, cartId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

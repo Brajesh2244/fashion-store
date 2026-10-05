@@ -40,4 +40,7 @@ public interface CartItemDAO {
     // Check Product Already Exists
     boolean isProductInCart(int cartId, int variantId);
 
+    // Get Cart Items Count
+    int getCartItemCount(int cartId);
+
 }

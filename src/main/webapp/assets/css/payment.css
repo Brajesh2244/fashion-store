@@ -1,66 +1,121 @@
 /* =========================================================
-   PAYMENT PAGE (Faire ES Minimal Design)
-========================================================= */
+   LUXE NEUMORPHIC PAYMENT (payment.css)
+   ========================================================= */
 
-.payment-container {
-    max-width: 580px;
-    margin: 40px auto;
-    background-color: var(--color-surface);
+.payment-card {
+    max-width: 600px;
+    margin: 30px auto 60px auto;
+    background: var(--color-surface);
     padding: 40px;
-    border-radius: var(--radius-btn);
-    border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--nm-flat);
 }
 
-.payment-container h3 {
-    font-family: var(--font-heading);
+.payment-card h3 {
     text-align: center;
-    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: 800;
     color: var(--color-primary);
-    font-size: 26px;
-    font-weight: 600;
+    margin-bottom: 24px;
 }
 
-.payment-option {
+.shipping-recap {
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--nm-inset-sm);
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    font-size: 13px;
+    color: var(--color-secondary);
+}
+
+.shipping-recap strong {
+    color: var(--color-primary);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.payment-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.payment-choice {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 16px 20px;
-    margin-bottom: 15px;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-btn);
+    gap: 16px;
+    padding: 18px 22px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: var(--nm-flat-sm);
     cursor: pointer;
     transition: var(--transition);
-    background-color: var(--color-surface);
 }
 
-.payment-option:hover {
-    border-color: var(--color-primary);
-    background-color: var(--color-bg);
+.payment-choice:hover {
+    box-shadow: var(--nm-hover);
+    transform: translateY(-2px);
 }
 
-.payment-option input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--color-primary);
+.payment-choice input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-accent);
     cursor: pointer;
 }
 
-.payment-option label {
-    font-family: var(--font-body);
+.payment-choice-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.payment-title {
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.payment-icons {
+    display: flex;
+    gap: 10px;
+    font-size: 22px;
     color: var(--color-secondary);
-    cursor: pointer;
-    flex-grow: 1;
 }
 
-.payment-container .btn {
+.pay-btn {
     width: 100%;
-    padding: 14px;
-    font-size: 15px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-top: 20px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(135deg, var(--color-accent), #b3924f);
+    color: #ffffff;
+    box-shadow: 4px 4px 14px rgba(200, 169, 106, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.pay-btn:hover {
+    box-shadow: 6px 6px 20px rgba(200, 169, 106, 0.5);
+    transform: translateY(-2px);
+}
+
+.security-note {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 12px;
+    color: var(--color-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }

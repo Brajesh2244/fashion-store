@@ -2,163 +2,143 @@
 <%@ page import="java.util.List"%>
 <%@ page import="com.fashionstore.model.Product"%>
 <%@ page import="com.fashionstore.model.Category"%>
+<%@ page import="java.math.BigDecimal"%>
 
 <%
 List<Product> products = (List<Product>) request.getAttribute("products");
 List<Category> categories = (List<Category>) request.getAttribute("categories");
+
+String selectedCategory = request.getParameter("category");
+String selectedSort = request.getParameter("sort");
+String searchKeyword = request.getParameter("keyword");
 %>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-<meta charset="UTF-8">
-
-<title>Products | Fashion Store</title>
-
-<link rel="stylesheet"
-href="${pageContext.request.contextPath}/assets/css/style.css?v=2">
-
-<link rel="stylesheet"
-href="${pageContext.request.contextPath}/assets/css/product.css?v=2">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curated Collections | FashionStore</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css?v=3">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/product.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
 
 <%@ include file="partials/navbar.jsp"%>
 
 <div class="container">
+    <h1 class="page-title">Curated Collections</h1>
 
-<h1 class="page-title">Our Products</h1>
+    <!-- NEUMORPHIC FILTER & SEARCH SECTION -->
+    <div class="filter-section">
+        <form action="${pageContext.request.contextPath}/products" method="get" class="filter-form">
+            <!-- Search Keyword Input -->
+            <div class="filter-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input
+                    type="text"
+                    name="keyword"
+                    placeholder="Search by product or brand name..."
+                    value="<%= searchKeyword != null ? searchKeyword : "" %>">
+            </div>
 
-<!-- FILTER SECTION -->
+            <!-- Category Dropdown -->
+            <select name="category" class="filter-select">
+                <option value="">All Categories</option>
+                <% if(categories != null) {
+                    for(Category cat : categories) {
+                        String isSel = (selectedCategory != null && selectedCategory.equals(String.valueOf(cat.getCategoryId()))) ? "selected" : "";
+                %>
+                    <option value="<%= cat.getCategoryId() %>" <%= isSel %>>
+                        <%= cat.getCategoryName() %>
+                    </option>
+                <%  }
+                } %>
+            </select>
 
-<div class="filter-section">
+            <!-- Sort Dropdown -->
+            <select name="sort" class="filter-select">
+                <option value="">Sort By: Default</option>
+                <option value="low" <%= "low".equals(selectedSort) ? "selected" : "" %>>Price: Low to High</option>
+                <option value="high" <%= "high".equals(selectedSort) ? "selected" : "" %>>Price: High to Low</option>
+                <option value="latest" <%= "latest".equals(selectedSort) ? "selected" : "" %>>Newest Additions</option>
+            </select>
 
-<form action="${pageContext.request.contextPath}/products" method="get">
+            <!-- Filter Buttons -->
+            <button type="submit" class="btn btn-primary filter-btn">
+                <i class="fa-solid fa-filter"></i> Apply
+            </button>
 
-<input
-type="text"
-name="keyword"
-placeholder="Search Product...">
-
-<select name="category">
-
-<option value="">All Categories</option>
-
-<%
-for(Category category : categories){
-%>
-
-<option value="<%=category.getCategoryId()%>">
-
-<%=category.getCategoryName()%>
-
-</option>
-
-<%
-}
-%>
-
-</select>
-
-<select name="sort">
-
-<option value="">Sort By</option>
-
-<option value="low">Price : Low to High</option>
-
-<option value="high">Price : High to Low</option>
-
-<option value="latest">Newest</option>
-
-</select>
-
-<button class="btn">
-
-Apply
-
-</button>
-
-</form>
-
-</div>
-
-<!-- PRODUCT GRID -->
-
-<div class="product-grid">
-
-<%
-if (products == null || products.isEmpty()) {
-%>
-    <div class="no-products" style="grid-column: 1 / -1; text-align: center; padding: 50px; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        <h3 style="color: #4b5563; font-size: 20px; margin-bottom: 10px;">No products found in this category.</h3>
-        <p style="color: #9ca3af;">Try browsing our other collections!</p>
+            <a href="${pageContext.request.contextPath}/products" class="btn filter-reset-btn" title="Reset Filters">
+                <i class="fa-solid fa-arrows-rotate"></i> Reset
+            </a>
+        </form>
     </div>
-<%
-} else {
-    for(Product product : products){
-%>
 
-<div class="product-card">
+    <!-- CATALOG STATS -->
+    <div class="catalog-stats">
+        <span>Showing <strong><%= products != null ? products.size() : 0 %></strong> styles found</span>
+        <% if (selectedCategory != null && !selectedCategory.isEmpty()) { %>
+            <span>Category Filter Active</span>
+        <% } %>
+    </div>
 
-<img
-src="${pageContext.request.contextPath}/<%=product.getImageUrl()%>"
-alt="<%=product.getProductName()%>">
+    <!-- PRODUCT GRID -->
+    <div class="product-grid">
+        <% if (products == null || products.isEmpty()) { %>
+            <div class="no-products">
+                <i class="fa-regular fa-folder-open"></i>
+                <h3>No Matching Products Found</h3>
+                <p>We couldn't find any products matching your selected criteria. Try adjusting your search or filters.</p>
+                <a href="${pageContext.request.contextPath}/products" class="btn btn-primary">
+                    <i class="fa-solid fa-bag-shopping"></i> Browse All Styles
+                </a>
+            </div>
+        <% } else {
+            for(Product product : products) {
+                BigDecimal price = product.getPrice();
+                double originalPrice = price != null ? price.doubleValue() * 1.3 : 1999.0;
+        %>
+            <div class="product-card">
+                <div class="product-thumb-wrap">
+                    <span class="product-tag">Exclusive</span>
+                    <img
+                        src="${pageContext.request.contextPath}/<%= product.getImageUrl() %>"
+                        alt="<%= product.getProductName() %>"
+                        loading="lazy">
+                </div>
+                <div class="product-details">
+                    <span class="brand"><%= product.getBrand() %></span>
+                    <h3 title="<%= product.getProductName() %>"><%= product.getProductName() %></h3>
+                    <p class="description"><%= product.getDescription() %></p>
+                    
+                    <div class="product-rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <span>4.7 (95)</span>
+                    </div>
 
-<div class="product-details">
+                    <div class="price-container">
+                        <span class="price">₹ <%= product.getPrice() %></span>
+                        <span class="mrp">₹ <%= String.format("%.0f", originalPrice) %></span>
+                        <span class="discount">30% OFF</span>
+                    </div>
 
-<h3>
-
-<%=product.getProductName()%>
-
-</h3>
-
-<p class="brand">
-
-<%=product.getBrand()%>
-
-</p>
-
-<p class="description">
-
-<%=product.getDescription()%>
-
-</p>
-
-<div class="price">
-
-₹ <%=product.getPrice()%>
-
-</div>
-
-<a
-href="${pageContext.request.contextPath}/product?id=<%=product.getProductId()%>"
-class="btn">
-
-View Details
-
-</a>
-
-</div>
-
-</div>
-
-<%
-
-}
-}
-
-%>
-
-</div>
-
+                    <a href="${pageContext.request.contextPath}/product?id=<%= product.getProductId() %>" class="btn-view">
+                        <i class="fa-solid fa-eye"></i> View Details
+                    </a>
+                </div>
+            </div>
+        <%  }
+        } %>
+    </div>
 </div>
 
 <%@ include file="partials/footer.jsp"%>
 
 </body>
-
 </html>
