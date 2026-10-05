@@ -1,0 +1,9 @@
+target/
+.git/
+.settings/
+.project
+.classpath
+*.md
+*.html
+*.pdf
+scratch_*.txt

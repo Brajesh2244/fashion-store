@@ -6,40 +6,40 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    // Database URL
-    private static final String URL = "jdbc:mysql://localhost:3306/fashion_store";
+    // Default Local Database Configurations
+    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/fashion_store";
+    private static final String DEFAULT_USERNAME = "root";
+    private static final String DEFAULT_PASSWORD = "root@123";
 
-    // Database Username
-    private static final String USERNAME = "root";
-
-    // Database Password
-    private static final String PASSWORD = "root@123";
-
-    // Method to establish database connection
+    // Method to establish database connection (Supports both local and cloud environments)
     public static Connection getConnection() {
 
         Connection connection = null;
 
         try {
-
             // Load MySQL JDBC Driver
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            // Establish Connection
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            // Read environment variables if available (e.g. from Railway, Render, AWS, Clever Cloud)
+            String envUrl = System.getenv("DB_URL");
+            String envUser = System.getenv("DB_USER");
+            String envPass = System.getenv("DB_PASSWORD");
 
-            System.out.println("Database Connected Successfully...");
+            String url = (envUrl != null && !envUrl.trim().isEmpty()) ? envUrl : DEFAULT_URL;
+            String username = (envUser != null && !envUser.trim().isEmpty()) ? envUser : DEFAULT_USERNAME;
+            String password = (envPass != null && !envPass.trim().isEmpty()) ? envPass : DEFAULT_PASSWORD;
+
+            // Establish Connection
+            connection = DriverManager.getConnection(url, username, password);
+
+            System.out.println("Database Connected Successfully to: " + (envUrl != null ? "Cloud MySQL" : "Local MySQL"));
 
         } catch (ClassNotFoundException e) {
-
-            System.out.println("MySQL Driver Not Found");
+            System.err.println("MySQL Driver Not Found");
             e.printStackTrace();
-
         } catch (SQLException e) {
-
-            System.out.println("Database Connection Failed");
+            System.err.println("Database Connection Failed: " + e.getMessage());
             e.printStackTrace();
-
         }
 
         return connection;
