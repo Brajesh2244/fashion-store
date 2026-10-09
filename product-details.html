@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | FashionStore</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/product-details.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </a>
+        </div>
+
+        <div class="search-bar">
+            <form action="products.html" method="get" class="search-form">
+                <input type="text" name="keyword" placeholder="Search styles, brands, collections...">
+                <button type="submit" class="search-btn" aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+
+        <button class="mobile-toggle-btn" id="mobileMenuBtn" aria-label="Toggle Navigation Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="products.html" class="nav-link active"><i class="fa-solid fa-shirt"></i> Products</a></li>
+            <li>
+                <a href="cart.html" class="nav-link cart-link">
+                    <i class="fa-solid fa-cart-shopping"></i> Cart
+                    <span class="cart-badge" style="display:none;">0</span>
+                </a>
+            </li>
+            <li><a href="orders.html" class="nav-link"><i class="fa-solid fa-box-archive"></i> Orders</a></li>
+            <li class="user-pill-item">
+                <a href="profile.html" class="user-pill" title="My Profile">
+                    <span class="user-avatar"><i class="fa-solid fa-user"></i></span>
+                    <span class="user-name">Brajesh</span>
+                </a>
+            </li>
+            <li class="theme-toggle-item">
+                <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Dark Mode" title="Toggle Dark/Light Mode">
+                    <span class="toggle-track">
+                        <i class="fa-solid fa-sun icon-sun"></i>
+                        <i class="fa-solid fa-moon icon-moon"></i>
+                        <span class="toggle-thumb"></span>
+                    </span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container" id="detailsContainer">
+    <!-- Rendered via JS -->
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-col brand-col">
+            <div class="footer-logo">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </div>
+            <p class="brand-desc">Elevating your style with curated luxury collections. Crafted with exceptional quality.</p>
+        </div>
+        <div class="footer-col">
+            <h4 class="col-title">Quick Links</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="orders.html">Orders</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="footer-bottom-inner">
+            <p>&copy; 2026 FashionStore Portfolio Showcase. Live Interactive Demo.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const pid = Number(params.get('id')) || 1;
+    const product = PRODUCTS.find(p => p.id === pid) || PRODUCTS[0];
+
+    document.title = `${product.name} | FashionStore`;
+    const originalPrice = Math.round(product.price * 1.3);
+
+    const variantsHtml = (product.variants && product.variants.length > 0)
+        ? product.variants.map(v => `<option value="${v.id}">Size ${v.size} (Stock: ${v.stock} available)</option>`).join('')
+        : `<option value="1">Standard Size</option>`;
+
+    const container = document.getElementById('detailsContainer');
+    container.innerHTML = `
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="products.html">Products</a>
+            <span>/</span>
+            <span>${product.name}</span>
+        </div>
+
+        <div class="product-details-container">
+            <div class="product-image-box">
+                <img src="${product.imageUrl}" alt="${product.name}">
+            </div>
+
+            <div class="product-info-box">
+                <span class="brand-label">${product.brand}</span>
+                <h1>${product.name}</h1>
+
+                <div class="product-rating-box">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                    <span>4.8 (148 verified customer ratings)</span>
+                </div>
+
+                <p class="product-desc">${product.description}</p>
+
+                <div class="product-price-section">
+                    <span class="current-price">₹ ${product.price.toFixed(2)}</span>
+                    <span class="original-price">₹ ${originalPrice}</span>
+                    <span class="discount-tag">Save 30% Today</span>
+                </div>
+
+                <form id="addToCartForm" onsubmit="handleAddToCart(event, ${product.id})">
+                    <div class="variant-selection">
+                        <h4>Select Size</h4>
+                        <select id="variantSelect" class="variant-select" required>
+                            ${variantsHtml}
+                        </select>
+                    </div>
+
+                    <div class="quantity-selection">
+                        <h4>Quantity</h4>
+                        <div class="qty-input-wrap">
+                            <input type="number" id="qtyInput" value="1" min="1" max="10" required>
+                        </div>
+                    </div>
+
+                    <div class="stock-status">
+                        <i class="fa-solid fa-circle-check"></i> In Stock & Ready for Express Dispatch
+                    </div>
+
+                    <button type="submit" class="cart-action-btn">
+                        <i class="fa-solid fa-cart-shopping"></i> Add To Shopping Cart
+                    </button>
+                </form>
+
+                <div class="product-guarantees">
+                    <div class="guarantee-item">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>Free Standard Shipping</span>
+                    </div>
+                    <div class="guarantee-item">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        <span>7-Day Return & Exchange</span>
+                    </div>
+                    <div class="guarantee-item">
+                        <i class="fa-solid fa-shield-check"></i>
+                        <span>100% Verified Quality</span>
+                    </div>
+                    <div class="guarantee-item">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Encrypted Safe Payment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+});
+
+function handleAddToCart(e, pid) {
+    e.preventDefault();
+    const variantId = document.getElementById('variantSelect').value;
+    const qty = document.getElementById('qtyInput').value;
+    App.addToCart(pid, variantId, qty);
+}
+</script>
+
+</body>
+</html>

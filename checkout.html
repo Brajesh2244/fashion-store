@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | FashionStore</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/cart.css?v=4">
+    <link rel="stylesheet" href="assets/css/checkout.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </a>
+        </div>
+
+        <div class="search-bar">
+            <form action="products.html" method="get" class="search-form">
+                <input type="text" name="keyword" placeholder="Search styles, brands, collections...">
+                <button type="submit" class="search-btn" aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="products.html" class="nav-link"><i class="fa-solid fa-shirt"></i> Products</a></li>
+            <li>
+                <a href="cart.html" class="nav-link cart-link active">
+                    <i class="fa-solid fa-cart-shopping"></i> Cart
+                    <span class="cart-badge" style="display:none;">0</span>
+                </a>
+            </li>
+            <li><a href="orders.html" class="nav-link"><i class="fa-solid fa-box-archive"></i> Orders</a></li>
+            <li class="user-pill-item">
+                <a href="profile.html" class="user-pill" title="My Profile">
+                    <span class="user-avatar"><i class="fa-solid fa-user"></i></span>
+                    <span class="user-name">Brajesh</span>
+                </a>
+            </li>
+            <li class="theme-toggle-item">
+                <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Dark Mode" title="Toggle Dark/Light Mode">
+                    <span class="toggle-track">
+                        <i class="fa-solid fa-sun icon-sun"></i>
+                        <i class="fa-solid fa-moon icon-moon"></i>
+                        <span class="toggle-thumb"></span>
+                    </span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="checkout-steps">
+        <div class="step-item">
+            <span class="step-num">1</span>
+            <span>Shopping Cart</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item active">
+            <span class="step-num">2</span>
+            <span>Shipping</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+            <span class="step-num">3</span>
+            <span>Payment</span>
+        </div>
+    </div>
+
+    <h1 class="page-title">Shipping & Delivery</h1>
+
+    <div class="checkout-container">
+        <!-- Form -->
+        <div class="checkout-card">
+            <h3><i class="fa-solid fa-location-dot"></i> Delivery Address</h3>
+
+            <form id="checkoutForm" onsubmit="handleProceedToPayment(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="shipName" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="shipEmail" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="text" id="shipPhone" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Street Address / Flat / Landmark</label>
+                    <textarea id="shipStreet" rows="3" required placeholder="House number, apartment name, street area"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" id="shipCity" required placeholder="City">
+                    </div>
+
+                    <div class="form-group">
+                        <label>State</label>
+                        <input type="text" id="shipState" required placeholder="State">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Postal PIN Code</label>
+                    <input type="text" id="shipPin" required placeholder="PIN Code">
+                </div>
+
+                <button type="submit" class="checkout-btn">
+                    <span>Continue to Payment</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Summary -->
+        <div class="checkout-summary-card">
+            <h3><i class="fa-solid fa-receipt"></i> Order Summary</h3>
+            <div class="summary-items-list" id="checkoutItemsList"></div>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="checkoutSubtotal">₹ 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Delivery</span>
+                <span style="color: var(--color-success); font-weight: 700;">FREE</span>
+            </div>
+            <div class="summary-row total-row">
+                <span>Grand Total</span>
+                <span class="total-amount" id="checkoutTotal">₹ 0.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const user = App.getUser();
+    document.getElementById('shipName').value = user.fullName || '';
+    document.getElementById('shipEmail').value = user.email || '';
+    document.getElementById('shipPhone').value = user.phone || '';
+    document.getElementById('shipStreet').value = user.address || '';
+    document.getElementById('shipCity').value = user.city || '';
+    document.getElementById('shipState').value = user.state || '';
+    document.getElementById('shipPin').value = user.pincode || '';
+
+    const cart = App.getCart();
+    if (!cart || cart.length === 0) {
+        window.location.href = 'cart.html';
+        return;
+    }
+
+    const itemsList = document.getElementById('checkoutItemsList');
+    itemsList.innerHTML = cart.map(i => `
+        <div class="summary-item-row">
+            <div>
+                <div class="summary-item-name">${i.name}</div>
+                <div class="summary-item-meta">Size: ${i.size} | Qty: ${i.quantity}</div>
+            </div>
+            <div style="font-weight:700; color:var(--color-primary);">
+                ₹ ${(i.price * i.quantity).toFixed(2)}
+            </div>
+        </div>
+    `).join('');
+
+    const total = App.getCartTotal();
+    document.getElementById('checkoutSubtotal').textContent = `₹ ${total.toFixed(2)}`;
+    document.getElementById('checkoutTotal').textContent = `₹ ${total.toFixed(2)}`;
+});
+
+function handleProceedToPayment(e) {
+    e.preventDefault();
+    const street = document.getElementById('shipStreet').value.trim();
+    const city = document.getElementById('shipCity').value.trim();
+    const state = document.getElementById('shipState').value.trim();
+    const pin = document.getElementById('shipPin').value.trim();
+    const fullAddress = `${street}, ${city}, ${state} - ${pin}`;
+
+    sessionStorage.setItem('fs_shipping_address', fullAddress);
+    window.location.href = 'payment.html';
+}
+</script>
+
+</body>
+</html>

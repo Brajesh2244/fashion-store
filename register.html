@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | FashionStore</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/auth.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </a>
+        </div>
+
+        <div class="search-bar">
+            <form action="products.html" method="get" class="search-form">
+                <input type="text" name="keyword" placeholder="Search styles, brands, collections...">
+                <button type="submit" class="search-btn" aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+
+        <button class="mobile-toggle-btn" id="mobileMenuBtn" aria-label="Toggle Navigation Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="products.html" class="nav-link"><i class="fa-solid fa-shirt"></i> Products</a></li>
+            <li>
+                <a href="cart.html" class="nav-link cart-link">
+                    <i class="fa-solid fa-cart-shopping"></i> Cart
+                    <span class="cart-badge" style="display:none;">0</span>
+                </a>
+            </li>
+            <li><a href="orders.html" class="nav-link"><i class="fa-solid fa-box-archive"></i> Orders</a></li>
+            <li class="user-pill-item">
+                <a href="profile.html" class="user-pill" title="My Profile">
+                    <span class="user-avatar"><i class="fa-solid fa-user"></i></span>
+                    <span class="user-name">Brajesh</span>
+                </a>
+            </li>
+            <li class="theme-toggle-item">
+                <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Dark Mode" title="Toggle Dark/Light Mode">
+                    <span class="toggle-track">
+                        <i class="fa-solid fa-sun icon-sun"></i>
+                        <i class="fa-solid fa-moon icon-moon"></i>
+                        <span class="toggle-thumb"></span>
+                    </span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container auth-container">
+    <div class="auth-card register-card">
+        <div class="auth-brand-logo">
+            <div class="auth-brand-icon">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h2>Create Your Account</h2>
+            <p class="auth-subtitle">Join FashionStore for personalized collections and express checkout</p>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="auth-grid">
+                <div class="auth-input-group">
+                    <label>Full Name</label>
+                    <div class="input-with-icon">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" id="regName" placeholder="Your name" required>
+                    </div>
+                </div>
+
+                <div class="auth-input-group">
+                    <label>Phone Number</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="text" id="regPhone" placeholder="+91 98765 43210" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-grid">
+                <div class="auth-input-group">
+                    <label>Email Address</label>
+                    <div class="input-with-icon">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="name@example.com" required>
+                    </div>
+                </div>
+
+                <div class="auth-input-group">
+                    <label>Password</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="password" id="regPassword" placeholder="Create a password" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-input-group">
+                <label>Default Street Address</label>
+                <div class="input-with-icon">
+                    <i class="fa-solid fa-house"></i>
+                    <input type="text" id="regAddress" placeholder="Flat, building, area" required>
+                </div>
+            </div>
+
+            <div class="auth-grid">
+                <div class="auth-input-group">
+                    <label>City</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-city"></i>
+                        <input type="text" id="regCity" placeholder="City" required>
+                    </div>
+                </div>
+
+                <div class="auth-input-group">
+                    <label>State</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <input type="text" id="regState" placeholder="State" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-input-group">
+                <label>PIN Code</label>
+                <div class="input-with-icon">
+                    <i class="fa-solid fa-envelopes-bulk"></i>
+                    <input type="text" id="regPincode" placeholder="6-digit PIN code" required>
+                </div>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">
+                <span>Complete Registration</span>
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </form>
+
+        <div class="auth-footer-nav">
+            Already have an account? <a href="login.html">Sign In Here</a>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-wrapper">
+    <div class="footer-content">
+        <div class="footer-brand">
+            <div class="footer-logo">Fashion<span>Store</span></div>
+            <p>Elevating contemporary couture with artisanal precision and bespoke aesthetics.</p>
+        </div>
+        <div class="footer-bottom" style="margin-top:20px; font-size:13px; color:var(--color-text-muted);">
+            &copy; 2026 FashionStore Couture Inc. Designed with Luxe Neumorphism.
+        </div>
+    </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+function handleRegister(e) {
+    e.preventDefault();
+    const newUser = {
+        fullName: document.getElementById('regName').value.trim(),
+        phone: document.getElementById('regPhone').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        address: document.getElementById('regAddress').value.trim(),
+        city: document.getElementById('regCity').value.trim(),
+        state: document.getElementById('regState').value.trim(),
+        pincode: document.getElementById('regPincode').value.trim()
+    };
+
+    App.saveUser(newUser);
+    App.showToast('Account created successfully! Welcome to FashionStore.');
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 1000);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curated Collections | FashionStore</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/product.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </a>
+        </div>
+
+        <div class="search-bar">
+            <form action="products.html" method="get" class="search-form">
+                <input type="text" name="keyword" id="navKeyword" placeholder="Search styles, brands, collections...">
+                <button type="submit" class="search-btn" aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+
+        <button class="mobile-toggle-btn" id="mobileMenuBtn" aria-label="Toggle Navigation Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="products.html" class="nav-link active"><i class="fa-solid fa-shirt"></i> Products</a></li>
+            <li>
+                <a href="cart.html" class="nav-link cart-link">
+                    <i class="fa-solid fa-cart-shopping"></i> Cart
+                    <span class="cart-badge" style="display:none;">0</span>
+                </a>
+            </li>
+            <li><a href="orders.html" class="nav-link"><i class="fa-solid fa-box-archive"></i> Orders</a></li>
+            <li class="user-pill-item">
+                <a href="profile.html" class="user-pill" title="My Profile">
+                    <span class="user-avatar"><i class="fa-solid fa-user"></i></span>
+                    <span class="user-name">Brajesh</span>
+                </a>
+            </li>
+            <li class="theme-toggle-item">
+                <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Dark Mode" title="Toggle Dark/Light Mode">
+                    <span class="toggle-track">
+                        <i class="fa-solid fa-sun icon-sun"></i>
+                        <i class="fa-solid fa-moon icon-moon"></i>
+                        <span class="toggle-thumb"></span>
+                    </span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <h1 class="page-title">Curated Collections</h1>
+
+    <!-- FILTER SECTION -->
+    <div class="filter-section">
+        <form id="filterForm" class="filter-form" onsubmit="event.preventDefault(); applyFilters();">
+            <div class="filter-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="filterKeyword" placeholder="Search by product or brand name...">
+            </div>
+
+            <select id="filterCategory" class="filter-select" onchange="applyFilters()">
+                <option value="">All Categories</option>
+            </select>
+
+            <select id="filterSort" class="filter-select" onchange="applyFilters()">
+                <option value="">Sort By: Default</option>
+                <option value="low">Price: Low to High</option>
+                <option value="high">Price: High to Low</option>
+                <option value="latest">Newest Additions</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary filter-btn">
+                <i class="fa-solid fa-filter"></i> Apply
+            </button>
+
+            <button type="button" class="btn filter-reset-btn" onclick="resetFilters()">
+                <i class="fa-solid fa-arrows-rotate"></i> Reset
+            </button>
+        </form>
+    </div>
+
+    <!-- STATS -->
+    <div class="catalog-stats">
+        <span>Showing <strong id="productCount">40</strong> styles found</span>
+        <span id="activeFilterBadge" style="display:none; color: var(--color-accent); font-weight:700;">Filter Active</span>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="product-grid" id="productsGrid">
+        <!-- Rendered via JS -->
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-col brand-col">
+            <div class="footer-logo">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </div>
+            <p class="brand-desc">Elevating your style with curated luxury collections. Crafted with exceptional quality.</p>
+        </div>
+        <div class="footer-col">
+            <h4 class="col-title">Quick Links</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="orders.html">Orders</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="footer-bottom-inner">
+            <p>&copy; 2026 FashionStore Portfolio Showcase. Live Interactive Demo.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+function initFilterOptions() {
+    const catSelect = document.getElementById('filterCategory');
+    if (catSelect && typeof CATEGORIES !== 'undefined') {
+        CATEGORIES.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat.id;
+            opt.textContent = cat.name;
+            catSelect.appendChild(opt);
+        });
+    }
+
+    // Read URL query params
+    const params = new URLSearchParams(window.location.search);
+    const catParam = params.get('category');
+    const sortParam = params.get('sort');
+    const kwParam = params.get('keyword');
+
+    if (catParam) document.getElementById('filterCategory').value = catParam;
+    if (sortParam) document.getElementById('filterSort').value = sortParam;
+    if (kwParam) document.getElementById('filterKeyword').value = kwParam;
+
+    applyFilters();
+}
+
+function applyFilters() {
+    const kw = document.getElementById('filterKeyword').value.trim().toLowerCase();
+    const cat = document.getElementById('filterCategory').value;
+    const sort = document.getElementById('filterSort').value;
+
+    let filtered = [...PRODUCTS];
+
+    if (kw) {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(kw) || p.brand.toLowerCase().includes(kw) || p.description.toLowerCase().includes(kw));
+    }
+
+    if (cat) {
+        filtered = filtered.filter(p => p.categoryId === Number(cat));
+    }
+
+    if (sort === 'low') {
+        filtered.sort((a, b) => a.price - b.price);
+    } else if (sort === 'high') {
+        filtered.sort((a, b) => b.price - a.price);
+    } else if (sort === 'latest') {
+        filtered.sort((a, b) => b.id - a.id);
+    }
+
+    renderProducts(filtered);
+}
+
+function resetFilters() {
+    document.getElementById('filterKeyword').value = '';
+    document.getElementById('filterCategory').value = '';
+    document.getElementById('filterSort').value = '';
+    renderProducts(PRODUCTS);
+}
+
+function renderProducts(list) {
+    const grid = document.getElementById('productsGrid');
+    const countEl = document.getElementById('productCount');
+    countEl.textContent = list.length;
+
+    if (!list || list.length === 0) {
+        grid.innerHTML = `
+            <div class="no-products">
+                <i class="fa-regular fa-folder-open"></i>
+                <h3>No Matching Products Found</h3>
+                <p>We couldn't find any products matching your selected criteria. Try adjusting your search or filters.</p>
+                <button onclick="resetFilters()" class="btn btn-primary">
+                    <i class="fa-solid fa-bag-shopping"></i> Browse All Styles
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = list.map(p => {
+        const originalPrice = Math.round(p.price * 1.3);
+        return `
+            <div class="product-card">
+                <div class="product-thumb-wrap">
+                    <span class="product-tag">Exclusive</span>
+                    <img src="${p.imageUrl}" alt="${p.name}" loading="lazy">
+                </div>
+                <div class="product-details">
+                    <span class="brand">${p.brand}</span>
+                    <h3 title="${p.name}">${p.name}</h3>
+                    <p class="description">${p.description}</p>
+                    <div class="product-rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star-half-stroke"></i>
+                        <span>4.7 (95)</span>
+                    </div>
+                    <div class="price-container">
+                        <span class="price">₹ ${p.price.toFixed(2)}</span>
+                        <span class="mrp">₹ ${originalPrice}</span>
+                        <span class="discount">30% OFF</span>
+                    </div>
+                    <a href="product-details.html?id=${p.id}" class="btn-view">
+                        <i class="fa-solid fa-eye"></i> View Details
+                    </a>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', initFilterOptions);
+</script>
+
+</body>
+</html>

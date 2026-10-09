@@ -1,0 +1,311 @@
+/* =========================================================
+   LUXE NEUMORPHIC PRODUCTS CATALOG (product.css)
+   ========================================================= */
+
+/* Filter Bar */
+.filter-section {
+    background: var(--color-surface);
+    padding: 24px 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--nm-flat);
+    margin-bottom: 40px;
+    transition: var(--transition);
+}
+
+.filter-form {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-input-wrap {
+    flex: 2;
+    min-width: 220px;
+    position: relative;
+}
+
+.filter-input-wrap i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-secondary);
+    font-size: 14px;
+}
+
+.filter-input-wrap input {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    font-size: 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    background: var(--color-surface);
+    color: var(--color-primary);
+    box-shadow: var(--nm-inset-sm);
+    outline: none;
+    transition: var(--transition);
+}
+
+.filter-input-wrap input:focus {
+    border-color: var(--color-accent);
+    box-shadow: var(--nm-inset), 0 0 0 3px var(--color-accent-light);
+}
+
+.filter-select {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 18px;
+    font-size: 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    background: var(--color-surface);
+    color: var(--color-primary);
+    box-shadow: var(--nm-inset-sm);
+    outline: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.filter-select:focus {
+    border-color: var(--color-accent);
+}
+
+.filter-btn {
+    padding: 12px 28px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.filter-reset-btn {
+    padding: 12px 20px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-secondary);
+}
+
+/* Catalog Header / Stats */
+.catalog-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: var(--color-secondary);
+}
+
+.catalog-stats strong {
+    color: var(--color-primary);
+}
+
+/* Product Grid */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+/* Product Card */
+.product-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--nm-flat);
+    overflow: hidden;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.product-card:hover {
+    box-shadow: var(--nm-hover);
+    transform: translateY(-6px);
+}
+
+.product-thumb-wrap {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    background: rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+}
+
+.product-thumb-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.product-card:hover .product-thumb-wrap img {
+    transform: scale(1.08);
+}
+
+.product-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: var(--color-surface);
+    box-shadow: var(--nm-flat-sm);
+    color: var(--color-accent);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+.product-details {
+    padding: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-details .brand {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--color-accent);
+    margin-bottom: 6px;
+}
+
+.product-details h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-details .description {
+    font-size: 13px;
+    color: var(--color-secondary);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #f59e0b;
+    font-size: 12px;
+    margin-bottom: 14px;
+}
+
+.product-rating span {
+    color: var(--color-secondary);
+    font-size: 12px;
+    margin-left: 4px;
+}
+
+.price-container {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: auto;
+}
+
+.price-container .price {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+.price-container .mrp {
+    font-size: 14px;
+    color: var(--color-muted);
+    text-decoration: line-through;
+}
+
+.price-container .discount {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-success);
+}
+
+.btn-view {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    box-shadow: var(--nm-flat-sm);
+    color: var(--color-primary);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.btn-view:hover {
+    box-shadow: var(--nm-hover);
+    color: var(--color-accent);
+    transform: translateY(-2px);
+}
+
+.btn-view:active {
+    box-shadow: var(--nm-inset-sm);
+}
+
+/* Empty State */
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--nm-flat);
+}
+
+.no-products i {
+    font-size: 48px;
+    color: var(--color-accent);
+    margin-bottom: 16px;
+}
+
+.no-products h3 {
+    font-size: 20px;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+}
+
+.no-products p {
+    color: var(--color-secondary);
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filter-section {
+        padding: 18px;
+    }
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-input-wrap,
+    .filter-select,
+    .filter-btn,
+    .filter-reset-btn {
+        width: 100%;
+        min-width: unset;
+    }
+}

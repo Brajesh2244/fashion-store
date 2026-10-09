@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | FashionStore</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/orders.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="products.html" class="nav-link"><i class="fa-solid fa-shirt"></i> Products</a></li>
+            <li><a href="cart.html" class="nav-link cart-link"><i class="fa-solid fa-cart-shopping"></i> Cart</a></li>
+            <li><a href="orders.html" class="nav-link active"><i class="fa-solid fa-box-archive"></i> Orders</a></li>
+            <li class="user-pill-item">
+                <a href="profile.html" class="user-pill" title="My Profile">
+                    <span class="user-avatar"><i class="fa-solid fa-user"></i></span>
+                    <span class="user-name">Brajesh</span>
+                </a>
+            </li>
+            <li class="theme-toggle-item">
+                <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Dark Mode" title="Toggle Dark/Light Mode">
+                    <span class="toggle-track">
+                        <i class="fa-solid fa-sun icon-sun"></i>
+                        <i class="fa-solid fa-moon icon-moon"></i>
+                        <span class="toggle-thumb"></span>
+                    </span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <h1 class="page-title">My Order History</h1>
+    <div id="ordersContentArea"></div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const area = document.getElementById('ordersContentArea');
+    const orders = App.getOrders();
+
+    if (!orders || orders.length === 0) {
+        area.innerHTML = `
+            <div class="empty-orders-card">
+                <i class="fa-solid fa-box-open"></i>
+                <h3>No Orders Placed Yet</h3>
+                <p>You haven't placed any orders yet. Discover our curated collections and place your first order today!</p>
+                <a href="products.html" class="btn btn-primary">
+                    <i class="fa-solid fa-bag-shopping"></i> Start Shopping
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    area.innerHTML = `
+        <div class="orders-container-card">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Payment Method</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${orders.map(o => `
+                        <tr>
+                            <td><span class="order-id-tag">#${o.orderId}</span></td>
+                            <td><span class="order-date-text">${o.orderDate}</span></td>
+                            <td><span class="order-amount-text">₹ ${Number(o.totalAmount).toFixed(2)}</span></td>
+                            <td><span style="font-weight:600;">${o.paymentMethod}</span></td>
+                            <td>
+                                <span class="status-pill ${o.status === 'Pending' ? 'pending' : ''}">
+                                    <i class="fa-solid fa-circle-dot"></i> ${o.status}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="order-success.html?orderId=${o.orderId}" class="order-action-btn">
+                                    <i class="fa-solid fa-file-invoice"></i> View Receipt
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
+});
+</script>
+
+</body>
+</html>

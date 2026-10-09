@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Payment Method | FashionStore</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/cart.css?v=4">
+    <link rel="stylesheet" href="assets/css/payment.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="products.html" class="nav-link"><i class="fa-solid fa-shirt"></i> Products</a></li>
+            <li><a href="cart.html" class="nav-link cart-link"><i class="fa-solid fa-cart-shopping"></i> Cart</a></li>
+            <li><a href="orders.html" class="nav-link"><i class="fa-solid fa-box-archive"></i> Orders</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="checkout-steps">
+        <div class="step-item">
+            <span class="step-num">1</span>
+            <span>Shopping Cart</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+            <span class="step-num">2</span>
+            <span>Shipping</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item active">
+            <span class="step-num">3</span>
+            <span>Payment</span>
+        </div>
+    </div>
+
+    <h1 class="page-title">Secure Payment</h1>
+
+    <div class="payment-card">
+        <h3><i class="fa-solid fa-credit-card"></i> Choose Payment Method</h3>
+
+        <div class="shipping-recap">
+            <strong><i class="fa-solid fa-truck"></i> Delivering To:</strong>
+            <span id="recapAddress">Loading address...</span>
+        </div>
+
+        <form onsubmit="handlePlaceOrder(event)">
+            <div class="payment-options-list">
+                <label class="payment-choice" for="pay_upi">
+                    <input type="radio" id="pay_upi" name="paymentMethod" value="UPI" checked>
+                    <div class="payment-choice-info">
+                        <span class="payment-title">Instant UPI (GPay, PhonePe, Paytm)</span>
+                        <div class="payment-icons"><i class="fa-solid fa-qrcode"></i></div>
+                    </div>
+                </label>
+
+                <label class="payment-choice" for="pay_card">
+                    <input type="radio" id="pay_card" name="paymentMethod" value="Card">
+                    <div class="payment-choice-info">
+                        <span class="payment-title">Credit or Debit Card</span>
+                        <div class="payment-icons">
+                            <i class="fa-brands fa-cc-visa"></i>
+                            <i class="fa-brands fa-cc-mastercard"></i>
+                        </div>
+                    </div>
+                </label>
+
+                <label class="payment-choice" for="pay_nb">
+                    <input type="radio" id="pay_nb" name="paymentMethod" value="Net Banking">
+                    <div class="payment-choice-info">
+                        <span class="payment-title">Internet Banking</span>
+                        <div class="payment-icons"><i class="fa-solid fa-building-columns"></i></div>
+                    </div>
+                </label>
+
+                <label class="payment-choice" for="pay_cod">
+                    <input type="radio" id="pay_cod" name="paymentMethod" value="Cash On Delivery">
+                    <div class="payment-choice-info">
+                        <span class="payment-title">Cash on Delivery (COD)</span>
+                        <div class="payment-icons"><i class="fa-solid fa-money-bill-wave"></i></div>
+                    </div>
+                </label>
+            </div>
+
+            <button type="submit" class="pay-btn">
+                <i class="fa-solid fa-lock"></i> Authorize & Place Order (<span id="payTotalAmount">₹ 0.00</span>)
+            </button>
+
+            <div class="security-note">
+                <i class="fa-solid fa-shield-halved"></i> 256-bit SSL Bank-Grade Encryption Guaranteed
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const addr = sessionStorage.getItem('fs_shipping_address') || "Flat 402, Luxury Towers, Indiranagar, Bengaluru - 560038";
+    document.getElementById('recapAddress').textContent = addr;
+
+    const total = App.getCartTotal();
+    document.getElementById('payTotalAmount').textContent = `₹ ${total.toFixed(2)}`;
+});
+
+function handlePlaceOrder(e) {
+    e.preventDefault();
+    const cart = App.getCart();
+    if (!cart || cart.length === 0) {
+        window.location.href = 'cart.html';
+        return;
+    }
+
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    const address = sessionStorage.getItem('fs_shipping_address') || "Registered Customer Address";
+    const orderId = Math.floor(1000 + Math.random() * 9000);
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 19).replace('T', ' ');
+
+    const newOrder = {
+        orderId: orderId,
+        orderDate: dateStr,
+        totalAmount: App.getCartTotal(),
+        shippingAddress: address,
+        paymentMethod: paymentMethod,
+        status: "Confirmed",
+        items: cart.map(i => ({
+            name: i.name,
+            brand: i.brand,
+            size: i.size,
+            price: i.price,
+            quantity: i.quantity,
+            imageUrl: i.imageUrl
+        }))
+    };
+
+    App.saveOrder(newOrder);
+    App.clearCart();
+
+    window.location.href = `order-success.html?orderId=${orderId}`;
+}
+</script>
+
+</body>
+</html>

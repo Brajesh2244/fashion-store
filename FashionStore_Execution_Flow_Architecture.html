@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fashion Store - Project Architecture & Execution Flow</title>
+<style>
+    @page {
+        size: A4 portrait;
+        margin: 12mm 10mm 12mm 10mm;
+        @bottom-right {
+            content: "Page " counter(page) " of " counter(pages);
+            font-size: 8pt;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #64748b;
+        }
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+        color: #1e293b;
+        background-color: #ffffff;
+        line-height: 1.45;
+        font-size: 9pt;
+    }
+
+    .page-break {
+        page-break-before: always;
+    }
+
+    /* Header Banner */
+    .header-banner {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e40af 100%);
+        color: #ffffff;
+        padding: 20px 24px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        box-shadow: 0 8px 20px -5px rgba(15, 23, 42, 0.2);
+    }
+
+    .header-title {
+        font-size: 20pt;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 4px;
+        color: #ffffff;
+    }
+
+    .header-subtitle {
+        font-size: 10pt;
+        color: #93c5fd;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .header-badges {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #f8fafc;
+        padding: 3px 8px;
+        border-radius: 5px;
+        font-size: 7.5pt;
+        font-weight: 600;
+    }
+
+    /* Section Styles */
+    .section {
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        font-size: 13pt;
+        font-weight: 700;
+        color: #0f172a;
+        border-bottom: 2.5px solid #2563eb;
+        padding-bottom: 4px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-subtitle {
+        font-size: 10pt;
+        font-weight: 600;
+        color: #1e40af;
+        margin-top: 12px;
+        margin-bottom: 6px;
+    }
+
+    /* Callout & Alert Boxes */
+    .callout {
+        border-left: 4px solid #2563eb;
+        background-color: #eff6ff;
+        padding: 10px 14px;
+        border-radius: 0 6px 6px 0;
+        margin-bottom: 12px;
+        font-size: 8.5pt;
+    }
+
+    .callout-important {
+        border-left-color: #dc2626;
+        background-color: #fef2f2;
+    }
+
+    .callout-important .callout-title {
+        color: #991b1b;
+    }
+
+    .callout-tip {
+        border-left-color: #059669;
+        background-color: #ecfdf5;
+    }
+
+    .callout-tip .callout-title {
+        color: #065f46;
+    }
+
+    .callout-title {
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 3px;
+        font-size: 9pt;
+    }
+
+    /* Tables */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+        font-size: 8pt;
+    }
+
+    th, td {
+        border: 1px solid #cbd5e1;
+        padding: 6px 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f1f5f9;
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f8fafc;
+    }
+
+    /* Code & Class Styling */
+    code, .code-inline {
+        font-family: 'Consolas', 'Courier New', monospace;
+        background-color: #f1f5f9;
+        color: #091e42;
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-size: 8pt;
+        border: 1px solid #e2e8f0;
+    }
+
+    .class-tag {
+        font-family: 'Consolas', monospace;
+        font-weight: 700;
+        color: #1e40af;
+    }
+
+    .method-tag {
+        font-family: 'Consolas', monospace;
+        color: #059669;
+        font-weight: 600;
+    }
+
+    .sql-tag {
+        font-family: 'Consolas', monospace;
+        color: #b45309;
+        background-color: #fffbeb;
+        padding: 1px 4px;
+        border-radius: 4px;
+        border: 1px solid #fef3c7;
+        font-size: 7.5pt;
+    }
+
+    /* Card Grid */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .card {
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 10px 12px;
+        background-color: #ffffff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-header {
+        font-weight: 700;
+        font-size: 9.5pt;
+        color: #0f172a;
+        margin-bottom: 4px;
+        padding-bottom: 3px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Layer Colors */
+    .layer-servlet { border-top: 3.5px solid #2563eb; }
+    .layer-interface { border-top: 3.5px solid #9333ea; }
+    .layer-impl { border-top: 3.5px solid #0284c7; }
+    .layer-model { border-top: 3.5px solid #059669; }
+    .layer-db { border-top: 3.5px solid #d97706; }
+    .layer-jsp { border-top: 3.5px solid #e11d48; }
+
+    /* Diagrams & Flow Box Styling */
+    .flow-step-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .flow-node {
+        display: flex;
+        align-items: stretch;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        overflow: hidden;
+        background-color: #ffffff;
+    }
+
+    .node-num {
+        width: 32px;
+        background-color: #1e293b;
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 10pt;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .node-content {
+        padding: 8px 12px;
+        flex-grow: 1;
+    }
+
+    .node-title {
+        font-weight: 700;
+        font-size: 9pt;
+        color: #0f172a;
+        margin-bottom: 2px;
+    }
+
+    .node-detail {
+        font-size: 8pt;
+        color: #334155;
+    }
+
+    .flow-arrow {
+        text-align: center;
+        color: #2563eb;
+        font-size: 12pt;
+        font-weight: bold;
+        line-height: 1;
+        margin: -3px 0;
+    }
+
+    /* Sequence Table Simulation */
+    .seq-table td {
+        vertical-align: top;
+    }
+
+    .seq-step {
+        font-weight: 700;
+        color: #2563eb;
+        width: 35px;
+    }
+
+    .seq-from-to {
+        font-family: 'Consolas', monospace;
+        font-size: 7.5pt;
+        color: #475569;
+        width: 130px;
+    }
+
+    /* Architecture Visual Canvas */
+    .arch-box {
+        background-color: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 14px;
+    }
+
+    .arch-row {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .arch-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .arch-card {
+        flex: 1;
+        background: white;
+        border: 1.5px solid #94a3b8;
+        border-radius: 6px;
+        padding: 8px;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .arch-card-title {
+        font-weight: 800;
+        font-size: 8.5pt;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 3px;
+    }
+
+    .arch-card-items {
+        font-family: 'Consolas', monospace;
+        font-size: 7.5pt;
+        color: #334155;
+        line-height: 1.35;
+    }
+
+    .arch-arrow-down {
+        text-align: center;
+        font-size: 13pt;
+        color: #2563eb;
+        font-weight: bold;
+        margin: 3px 0;
+    }
+
+    .footer-note {
+        text-align: center;
+        font-size: 7.5pt;
+        color: #64748b;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 6px;
+        margin-top: 16px;
+    }
+</style>
+</head>
+<body>
+
+    <!-- COVER / HEADER BANNER -->
+    <div class="header-banner">
+        <div class="header-title">Java Fashion Store - Architectural & Execution Flow Blueprint</div>
+        <div class="header-subtitle">Strict Codebase Analysis: Servlet, DAO Pattern, POJO Model & MySQL Database Interaction</div>
+        <div class="header-badges">
+            <span class="badge">Architecture: Jakarta Web MVC</span>
+            <span class="badge">Service Layer Status: ABSENT (Direct Controller-DAO)</span>
+            <span class="badge">Database: MySQL (JDBC Connection)</span>
+            <span class="badge">Target Audience: Beginners to Java Web Dev</span>
+        </div>
+    </div>
+
+    <!-- SECTION 1: OVERALL ARCHITECTURE -->
+    <div class="section">
+        <div class="section-title">1. Overall Project Architecture & Package Structure</div>
+        
+        <p>The <strong>Fashion Store</strong> project is built using <strong>Jakarta EE Web Technologies (Java Servlets & JSP)</strong> running on a relational <strong>MySQL Database</strong> accessed via <strong>JDBC (Java Database Connectivity)</strong>.</p>
+        
+        <div class="callout callout-important" style="margin-top: 8px;">
+            <div class="callout-title">⚠️ CRITICAL ARCHITECTURAL DIRECTIVE (NO SERVICE LAYER)</div>
+            This project <strong>DOES NOT USE A SERVICE LAYER</strong>. The Servlets (Controllers) directly instantiate and invoke the Data Access Object (DAO) implementation classes (e.g., <code>UserDAO userDAO = new UserDAOImpl();</code>). There is no intermediate service interface or class present in the codebase.
+        </div>
+
+        <div class="section-subtitle">Package & Directory Breakdown</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 22%;">Package / Directory</th>
+                    <th style="width: 15%;">Layer Role</th>
+                    <th style="width: 33%;">Exact Classes & Files Included</th>
+                    <th style="width: 30%;">Core Responsibility</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>com.fashionstore.controller</code></td>
+                    <td><strong>Servlet / Controller</strong></td>
+                    <td><code>LoginServlet</code>, <code>RegisterServlet</code>, <code>HomeServlet</code>, <code>ProductServlet</code>, <code>ProductDetailsServlet</code>, <code>CartServlet</code>, <code>UpdateCartServlet</code>, <code>RemoveCartItemServlet</code>, <code>CheckoutServlet</code>, <code>PlaceOrderServlet</code>, <code>PaymentServlet</code>, <code>OrderSuccessServlet</code>, <code>OrdersServlet</code>, <code>OrderDetailsServlet</code>, <code>ProfileServlet</code>, <code>UpdateProfileServlet</code>, <code>LogoutServlet</code></td>
+                    <td>Intercepts user HTTP GET/POST requests, extracts form parameters, verifies sessions, invokes DAO methods, sets request/session attributes, and forwards or redirects.</td>
+                </tr>
+                <tr>
+                    <td><code>com.fashionstore.dao</code></td>
+                    <td><strong>DAO Interface</strong></td>
+                    <td><code>UserDAO</code>, <code>ProductDAO</code>, <code>CategoryDAO</code>, <code>ProductVariantDAO</code>, <code>CartDAO</code>, <code>CartItemDAO</code>, <code>OrderDAO</code>, <code>OrderItemDAO</code></td>
+                    <td>Defines abstract Java method contracts (interfaces) for CRUD (Create, Read, Update, Delete) database operations.</td>
+                </tr>
+                <tr>
+                    <td><code>com.fashionstore.dao.impl</code></td>
+                    <td><strong>DAO Implementation</strong></td>
+                    <td><code>UserDAOImpl</code>, <code>ProductDAOImpl</code>, <code>CategoryDAOImpl</code>, <code>ProductVariantDAOImpl</code>, <code>CartDAOImpl</code>, <code>CartItemDAOImpl</code>, <code>OrderDAOImpl</code>, <code>OrderItemDAOImpl</code></td>
+                    <td>Implements DAO interfaces. Houses raw SQL query strings, obtains JDBC connections via <code>DBConnection</code>, prepares SQL statements, executes queries, and maps SQL <code>ResultSet</code> rows to POJO objects.</td>
+                </tr>
+                <tr>
+                    <td><code>com.fashionstore.model</code></td>
+                    <td><strong>POJO / Model Layer</strong></td>
+                    <td><code>User</code>, <code>Product</code>, <code>ProductVariant</code>, <code>Category</code>, <code>Cart</code>, <code>CartItem</code>, <code>CartView</code>, <code>Order</code>, <code>OrderItem</code>, <code>OrderItemView</code></td>
+                    <td>Encapsulated Plain Old Java Objects (POJOs) with private fields, getters, setters, and constructors. Serves as data carriers between Database, DAO, Servlet, and JSP.</td>
+                </tr>
+                <tr>
+                    <td><code>com.fashionstore.util</code></td>
+                    <td><strong>Database Utility Layer</strong></td>
+                    <td><code>DBConnection</code>, <code>TestConnection</code>, <code>DAOTest</code></td>
+                    <td>Provides static database connection factory method <code>DBConnection.getConnection()</code> using MySQL JDBC Driver.</td>
+                </tr>
+                <tr>
+                    <td><code>webapp/WEB-INF/views</code></td>
+                    <td><strong>JSP Presentation View</strong></td>
+                    <td><code>login.jsp</code>, <code>register.jsp</code>, <code>home.jsp</code>, <code>products.jsp</code>, <code>product-details.jsp</code>, <code>cart.jsp</code>, <code>checkout.jsp</code>, <code>payment.jsp</code>, <code>order-success.jsp</code>, <code>orders.jsp</code>, <code>order-details.jsp</code>, <code>profile.jsp</code>, <code>partials/navbar.jsp</code>, <code>partials/footer.jsp</code></td>
+                    <td>Renders HTML markup dynamically to the user's browser using data passed from Servlets via request attributes. Protected inside <code>WEB-INF</code> so users cannot access JSPs directly via URL without going through Servlets.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 2: LAYER DISTINCTIONS & POJO EXPLANATION -->
+    <div class="section">
+        <div class="section-title">2. Core Component Roles & Beginner's Layer Distinctions</div>
+
+        <p>To understand this Java web application, you must distinguish between the 6 distinct component types used in the project:</p>
+
+        <div class="grid-3" style="margin-top: 10px;">
+            <div class="card layer-interface">
+                <div class="card-header">
+                    <span>1. DAO Interface</span>
+                    <code style="font-size:6.5pt;">Java Interface</code>
+                </div>
+                <p><strong>Example:</strong> <code>UserDAO.java</code></p>
+                <p style="font-size:8pt; color:#475569; margin-top:3px;">A rulebook or contract. Contains only method signatures without code bodies (e.g. <code>boolean registerUser(User user);</code>). It defines <em>what</em> database actions can be taken without specifying <em>how</em>.</p>
+            </div>
+
+            <div class="card layer-impl">
+                <div class="card-header">
+                    <span>2. DAO Implementation</span>
+                    <code style="font-size:6.5pt;">Java Class</code>
+                </div>
+                <p><strong>Example:</strong> <code>UserDAOImpl.java</code></p>
+                <p style="font-size:8pt; color:#475569; margin-top:3px;">The actual worker. Implements the DAO interface (<code>implements UserDAO</code>), opens JDBC connections, executes SQL queries against MySQL, and packages SQL rows into Java objects.</p>
+            </div>
+
+            <div class="card layer-model">
+                <div class="card-header">
+                    <span>3. POJO / Model</span>
+                    <code style="font-size:6.5pt;">Data Carrier</code>
+                </div>
+                <p><strong>Example:</strong> <code>User.java</code>, <code>CartView.java</code></p>
+                <p style="font-size:8pt; color:#475569; margin-top:3px;"><strong>Plain Old Java Object</strong>. A container with private variables (e.g., <code>userId</code>, <code>email</code>), constructors, getters, and setters. Holds data in memory while traveling between database and view.</p>
+            </div>
+
+            <div class="card layer-servlet">
+                <div class="card-header">
+                    <span>4. Servlet / Controller</span>
+                    <code style="font-size:6.5pt;">HTTP Router</code>
+                </div>
+                <p><strong>Example:</strong> <code>LoginServlet.java</code></p>
+                <p style="font-size:8pt; color:#475569; margin-top:3px;">Extends <code>HttpServlet</code> with <code>@WebServlet("/login")</code> annotation. Listens for browser requests (<code>doGet</code>/<code>doPost</code>), coordinates DAO calls, manages HTTP Sessions, and decides which JSP to display.</p>
+            </div>
+
+            <div class="card layer-db">
+                <div class="card-header">
+                    <span>5. Connection Layer</span>
+                    <code style="font-size:6.5pt;">Database Manager</code>
+                </div>
+                <p><strong>Example:</strong> <code>DBConnection.java</code></p>
+                <p style="font-size:8pt; color:#475569; margin-top:3px;">Utility class containing static method <code>DBConnection.getConnection()</code>. Loads MySQL JDBC Driver and opens active connections to <code>jdbc:mysql://localhost:3306/fashion_store</code>.</p>
+            </div>
+
+            <div class="card layer-jsp">
+                <div class="card-header">
+                    <span>6. JSP / View</span>
+                    <code style="font-size:6.5pt;">HTML Renderer</code>
+                </div>
+                <p><strong>Example:</strong> <code>products.jsp</code></p>
+                <p style="font-size:8pt; color:#475569; margin-top:3px;">JavaServer Pages inside <code>WEB-INF/views</code>. Combines HTML with Java Expression Language (EL) / JSTL tags to output dynamic web pages to the user.</p>
+            </div>
+        </div>
+
+        <div class="section-subtitle">Deep Dive: What a POJO/Model Class Does & How Objects Are Used</div>
+        <p>A <strong>POJO (Plain Old Java Object)</strong> is a clean Java class that maps directly to database tables or combined query views. It does not contain complex business logic or SQL statements; its sole job is to hold data in structured variables.</p>
+        
+        <div class="callout callout-tip" style="margin-top:6px;">
+            <div class="callout-title">Visualizing Data Carrier POJOs in Fashion Store</div>
+            <ul>
+                <li><strong>Entity POJOs:</strong> <code>User</code> (maps to <code>users</code> table), <code>Product</code> (maps to <code>products</code> table), <code>ProductVariant</code> (maps to <code>product_variants</code> table), <code>Cart</code>, <code>CartItem</code>, <code>Order</code>, <code>OrderItem</code>.</li>
+                <li><strong>DTO / View POJOs:</strong> <code>CartView.java</code> and <code>OrderItemView.java</code> are specialized view models. For instance, <code>CartView</code> combines data joined from 3 database tables (<code>cart_items</code>, <code>product_variants</code>, and <code>products</code>) into a single object holding product name, brand, image URL, size, price, quantity, and calculated <code>subTotal</code>.</li>
+            </ul>
+        </div>
+
+        <div class="section-subtitle">How Objects Move Between Layers (Data Pipeline)</div>
+        <div style="background-color:#f8fafc; border:1px solid #e2e8f0; padding:10px 12px; border-radius:6px; font-size:8pt;">
+            <p><strong>1. Servlet to DAO (Writing Data):</strong> User submits a form. <code>RegisterServlet</code> reads raw form strings via <code>request.getParameter()</code>, creates a <code>new User()</code> POJO, populates it using setters (<code>user.setFullName(...)</code>), and passes the <code>user</code> object to <code>userDAO.registerUser(user)</code>.</p>
+            <p style="margin-top:4px;"><strong>2. DAO to Database (SQL Bindings):</strong> <code>UserDAOImpl</code> receives the <code>User</code> POJO, extracts values via getters (<code>user.getFullName()</code>), and inserts them into <code>PreparedStatement</code> parameters (<code>?</code>).</p>
+            <p style="margin-top:4px;"><strong>3. Database to DAO (Reading Data):</strong> <code>UserDAOImpl</code> executes <code>executeQuery()</code>, receives a SQL <code>ResultSet</code>, and invokes helper <code>mapResultSetToUser(resultSet)</code> which reads column values (e.g. <code>resultSet.getString("email")</code>) and creates a populated <code>User</code> object.</p>
+            <p style="margin-top:4px;"><strong>4. DAO to Servlet to JSP (Rendering Data):</strong> <code>UserDAOImpl</code> returns the <code>User</code> object to <code>LoginServlet</code>. The Servlet attaches it to the request scope via <code>request.setAttribute("user", user)</code> or session scope via <code>session.setAttribute("loggedInUser", user)</code>. Finally, <code>login.jsp</code> reads fields using Expression Language: <code>${sessionScope.loggedInUser.fullName}</code>.</p>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 3: DATABASE CONNECTION & JDBC MACHINERY -->
+    <div class="section">
+        <div class="section-title">3. Database Connection Creation & SQL Query Execution</div>
+
+        <p>Database connectivity in Fashion Store is centralized in <code>com.fashionstore.util.DBConnection</code>. Every DAO implementation calls this class whenever it needs to execute a query.</p>
+
+        <div class="grid-2" style="margin-top:8px;">
+            <div class="card">
+                <div class="card-header">DBConnection Configuration Details</div>
+                <table style="margin-bottom:0; font-size:7.5pt;">
+                    <tr><th>Parameter</th><th>Actual Value in Code</th></tr>
+                    <tr><td>Class Name</td><td><code>com.fashionstore.util.DBConnection</code></td></tr>
+                    <tr><td>Static Method</td><td><code>public static Connection getConnection()</code></td></tr>
+                    <tr><td>JDBC Driver</td><td><code>com.mysql.cj.jdbc.Driver</code></td></tr>
+                    <tr><td>Database URL</td><td><code>jdbc:mysql://localhost:3306/fashion_store</code></td></tr>
+                    <tr><td>Username</td><td><code>root</code></td></tr>
+                    <tr><td>Password</td><td><code>root@123</code></td></tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Inside DBConnection.getConnection() Method</div>
+                <pre style="font-family:'Consolas',monospace; font-size:7pt; color:#1e293b; background:#f1f5f9; padding:6px; border-radius:4px; overflow-x:auto;">
+public static Connection getConnection() {
+    Connection connection = null;
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        connection = DriverManager.getConnection(
+            URL, USERNAME, PASSWORD);
+        System.out.println("Database Connected...");
+    } catch (ClassNotFoundException | SQLException e) {
+        e.printStackTrace();
+    }
+    return connection;
+}</pre>
+            </div>
+        </div>
+
+        <div class="section-subtitle">JDBC Object Roles & Resource Management</div>
+        <p>Every DAO method uses <strong>Try-With-Resources</strong> blocks to manage JDBC objects. This automatically closes database resources (Connection, PreparedStatement, ResultSet) even if an exception occurs, preventing connection leaks.</p>
+
+        <table style="font-size:7.5pt;">
+            <thead>
+                <tr>
+                    <th style="width: 22%;">JDBC Class / Interface</th>
+                    <th style="width: 38%;">Exact Code Usage in Project</th>
+                    <th style="width: 40%;">Purpose in Execution Flow</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>java.sql.Connection</code></td>
+                    <td><code>Connection connection = DBConnection.getConnection();</code></td>
+                    <td>Establishes active physical socket session with MySQL server.</td>
+                </tr>
+                <tr>
+                    <td><code>java.sql.PreparedStatement</code></td>
+                    <td><code>PreparedStatement preparedStatement = connection.prepareStatement(SQL);</code></td>
+                    <td>Pre-compiles SQL queries with positional parameters (<code>?</code>). Protects against SQL Injection attacks and handles parameterized data insertion (e.g. <code>ps.setString(1, email);</code>).</td>
+                </tr>
+                <tr>
+                    <td><code>java.sql.ResultSet</code></td>
+                    <td><code>ResultSet resultSet = preparedStatement.executeQuery();</code></td>
+                    <td>Holds the tabular data returned by MySQL SELECT queries. Acts as a cursor pointing to data rows (e.g., <code>while(resultSet.next()) { ... }</code>).</td>
+                </tr>
+                <tr>
+                    <td><code>Generated Keys</code></td>
+                    <td><code>connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)</code></td>
+                    <td>Used in <code>OrderDAOImpl.placeOrder()</code> to capture the auto-incremented primary key (<code>order_id</code>) generated by MySQL after inserting a new order row.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-subtitle">Web Objects & Context Variables Reference</div>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header">HttpServletRequest & HttpServletResponse</div>
+                <ul style="font-size:8pt; padding-left:12px; color:#334155;">
+                    <li><code>request.getParameter("key")</code>: Retrieves string inputs sent from HTML form inputs or URL query parameters (e.g. <code>?id=5</code>).</li>
+                    <li><code>request.setAttribute("key", object)</code>: Attaches data (e.g. <code>List&lt;Product&gt;</code>) to request scope for JSP rendering.</li>
+                    <li><code>request.getRequestDispatcher("/WEB-INF/views/x.jsp").forward(...)</code>: Server-side dispatch that keeps request data intact.</li>
+                    <li><code>response.sendRedirect(request.getContextPath() + "/url")</code>: Browser-side redirect commanding user browser to make a fresh GET request.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">HttpSession Management</div>
+                <ul style="font-size:8pt; padding-left:12px; color:#334155;">
+                    <li><code>request.getSession(false)</code>: Retrieves existing HTTP session without creating a new one if missing. Used for login authentication checks.</li>
+                    <li><code>session.setAttribute("loggedInUser", user)</code>: Stores logged-in user object globally across multiple browser requests.</li>
+                    <li><code>session.setAttribute("userId", user.getUserId())</code>: Quick access attribute for cart and order queries.</li>
+                    <li><code>session.invalidate()</code>: Used in <code>LogoutServlet.doGet()</code> to destroy the session upon logging out.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 4: BIG SYSTEM ARCHITECTURE DIAGRAM -->
+    <div class="section">
+        <div class="section-title">4. Big System Architecture Diagram (Class & Layer Interaction)</div>
+
+        <p>This diagram visualizes how all major components in the Fashion Store codebase communicate from user web browser to MySQL database tables.</p>
+
+        <div class="arch-box" style="margin-top: 10px;">
+            <!-- BROWSER / JSP LAYER -->
+            <div class="arch-card-title" style="color:#e11d48;">1. Presentation Layer (JSP Views inside /WEB-INF/views/)</div>
+            <div class="arch-row">
+                <div class="arch-card layer-jsp">
+                    <div class="arch-card-title">Auth & User Views</div>
+                    <div class="arch-card-items">login.jsp<br>register.jsp<br>profile.jsp</div>
+                </div>
+                <div class="arch-card layer-jsp">
+                    <div class="arch-card-title">Catalog Views</div>
+                    <div class="arch-card-items">home.jsp<br>products.jsp<br>product-details.jsp</div>
+                </div>
+                <div class="arch-card layer-jsp">
+                    <div class="arch-card-title">Cart & Checkout Views</div>
+                    <div class="arch-card-items">cart.jsp<br>checkout.jsp<br>payment.jsp</div>
+                </div>
+                <div class="arch-card layer-jsp">
+                    <div class="arch-card-title">Order Views</div>
+                    <div class="arch-card-items">order-success.jsp<br>orders.jsp<br>order-details.jsp</div>
+                </div>
+            </div>
+
+            <div class="arch-arrow-down">⬇️ HTTP GET / POST Requests & Dispatch Forwards ⬇️</div>
+
+            <!-- CONTROLLER / SERVLET LAYER -->
+            <div class="arch-card-title" style="color:#2563eb;">2. Controller Layer (Jakarta Servlets in com.fashionstore.controller)</div>
+            <div class="arch-row">
+                <div class="arch-card layer-servlet">
+                    <div class="arch-card-title">Auth Controllers</div>
+                    <div class="arch-card-items">LoginServlet<br>RegisterServlet<br>LogoutServlet</div>
+                </div>
+                <div class="arch-card layer-servlet">
+                    <div class="arch-card-title">Catalog Controllers</div>
+                    <div class="arch-card-items">HomeServlet<br>ProductServlet<br>ProductDetailsServlet</div>
+                </div>
+                <div class="arch-card layer-servlet">
+                    <div class="arch-card-title">Cart Controllers</div>
+                    <div class="arch-card-items">CartServlet<br>UpdateCartServlet<br>RemoveCartItemServlet</div>
+                </div>
+                <div class="arch-card layer-servlet">
+                    <div class="arch-card-title">Order Controllers</div>
+                    <div class="arch-card-items">CheckoutServlet<br>PlaceOrderServlet<br>OrdersServlet<br>OrderDetailsServlet</div>
+                </div>
+            </div>
+
+            <div class="arch-arrow-down">⬇️ Direct Java Method Calls (NO Service Layer) ⬇️</div>
+
+            <!-- DAO INTERFACE & IMPL LAYER -->
+            <div class="arch-card-title" style="color:#0284c7;">3. Data Access Layer (Interfaces in com.fashionstore.dao & Impls in com.fashionstore.dao.impl)</div>
+            <div class="arch-row">
+                <div class="arch-card layer-impl">
+                    <div class="arch-card-title">User Management</div>
+                    <div class="arch-card-items">UserDAO ➔ UserDAOImpl</div>
+                </div>
+                <div class="arch-card layer-impl">
+                    <div class="arch-card-title">Product Catalog</div>
+                    <div class="arch-card-items">ProductDAO ➔ ProductDAOImpl<br>CategoryDAO ➔ CategoryDAOImpl<br>ProductVariantDAO ➔ Impl</div>
+                </div>
+                <div class="arch-card layer-impl">
+                    <div class="arch-card-title">Cart Management</div>
+                    <div class="arch-card-items">CartDAO ➔ CartDAOImpl<br>CartItemDAO ➔ CartItemDAOImpl</div>
+                </div>
+                <div class="arch-card layer-impl">
+                    <div class="arch-card-title">Order Processing</div>
+                    <div class="arch-card-items">OrderDAO ➔ OrderDAOImpl<br>OrderItemDAO ➔ OrderItemDAOImpl</div>
+                </div>
+            </div>
+
+            <div class="arch-arrow-down">⬇️ DBConnection.getConnection() & Prepared SQL Statements ⬇️</div>
+
+            <!-- UTILITY & DATABASE LAYER -->
+            <div class="arch-card-title" style="color:#d97706;">4. Utility & Relational Database Layer</div>
+            <div class="arch-row">
+                <div class="arch-card layer-db" style="flex: 1;">
+                    <div class="arch-card-title">DBConnection Utility</div>
+                    <div class="arch-card-items">com.fashionstore.util.DBConnection<br>Driver: com.mysql.cj.jdbc.Driver</div>
+                </div>
+                <div class="arch-card layer-db" style="flex: 2;">
+                    <div class="arch-card-title">MySQL Relational Database (fashion_store)</div>
+                    <div class="arch-card-items">
+                        Tables: <code>users</code> | <code>categories</code> | <code>products</code> | <code>product_variants</code> | <code>cart</code> | <code>cart_items</code> | <code>orders</code> | <code>order_items</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout callout-tip">
+            <div class="callout-title">Key Architectural Insight</div>
+            Data entities flow bi-directionally between layers wrapped inside <strong>POJO Models</strong> (<code>User</code>, <code>Product</code>, <code>CartView</code>, <code>Order</code>, <code>OrderItemView</code>). The Servlets hold references to DAO Interfaces, but instantiate concrete implementation classes during Servlet initialization in the <code>init()</code> method.
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 5: ONE COMPLETE EXAMPLE -->
+    <div class="section">
+        <div class="section-title">5. One Complete Example: End-to-End User Login Flow</div>
+
+        <p>Here is the exact step-by-step trace of the entire execution flow when a user logs into the application, from clicking the "Login" button to rendering the home page.</p>
+
+        <div class="flow-step-container" style="margin-top: 10px;">
+            <div class="flow-node">
+                <div class="node-num">1</div>
+                <div class="node-content">
+                    <div class="node-title">User Submits Form on Browser</div>
+                    <div class="node-detail">User enters email and password into <code>/WEB-INF/views/login.jsp</code> form and clicks <strong>Login</strong> button. Form attributes: <code>action="login" method="POST"</code>.</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #2563eb;">
+                <div class="node-num" style="background-color:#2563eb;">2</div>
+                <div class="node-content">
+                    <div class="node-title">LoginServlet Intercepts HTTP POST</div>
+                    <div class="node-detail">Container routes HTTP POST to <code>LoginServlet.doPost(HttpServletRequest request, HttpServletResponse response)</code> mapped via <code>@WebServlet("/login")</code>.</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #2563eb;">
+                <div class="node-num" style="background-color:#2563eb;">3</div>
+                <div class="node-content">
+                    <div class="node-title">Parameter Extraction in Servlet</div>
+                    <div class="node-detail"><code>LoginServlet</code> extracts form fields: <br>
+                    <code>String email = request.getParameter("email");</code><br>
+                    <code>String password = request.getParameter("password");</code></div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #9333ea;">
+                <div class="node-num" style="background-color:#9333ea;">4</div>
+                <div class="node-content">
+                    <div class="node-title">DAO Interface Method Invocation</div>
+                    <div class="node-detail"><code>LoginServlet</code> calls method defined in <code>UserDAO</code> interface:<br>
+                    <code>User user = userDAO.loginUser(email, password);</code> (Instantiated as <code>UserDAOImpl</code> in <code>init()</code>).</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #0284c7;">
+                <div class="node-num" style="background-color:#0284c7;">5</div>
+                <div class="node-content">
+                    <div class="node-title">UserDAOImpl Obtains DB Connection</div>
+                    <div class="node-detail"><code>UserDAOImpl.loginUser()</code> executes try-with-resources:<br>
+                    <code>Connection connection = DBConnection.getConnection();</code></div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #0284c7;">
+                <div class="node-num" style="background-color:#0284c7;">6</div>
+                <div class="node-content">
+                    <div class="node-title">PreparedStatement Parameter Binding & SQL Execution</div>
+                    <div class="node-detail"><code>UserDAOImpl</code> prepares SQL: <span class="sql-tag">SELECT * FROM users WHERE email = ? AND password = ?</span><br>
+                    Binds parameters: <code>ps.setString(1, email); ps.setString(2, password);</code><br>
+                    Executes query: <code>ResultSet resultSet = ps.executeQuery();</code></div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #059669;">
+                <div class="node-num" style="background-color:#059669;">7</div>
+                <div class="node-content">
+                    <div class="node-title">ResultSet Row Mapping to User POJO</div>
+                    <div class="node-detail">If <code>resultSet.next()</code> is true, calls private helper <code>mapResultSetToUser(resultSet)</code> which creates <code>new User()</code> object and calls setters (<code>setUserId</code>, <code>setFullName</code>, <code>setEmail</code>, <code>setPhone</code>, <code>setAddress</code>, etc.). Returns populated <code>User</code> instance.</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #2563eb;">
+                <div class="node-num" style="background-color:#2563eb;">8</div>
+                <div class="node-content">
+                    <div class="node-title">Servlet Session Management & Redirect Decision</div>
+                    <div class="node-detail"><code>LoginServlet</code> receives <code>User</code> object:<br>
+                    - If <code>user != null</code>: Obtains session via <code>HttpSession session = request.getSession();</code><br>
+                    Sets session attributes: <code>session.setAttribute("loggedInUser", user); session.setAttribute("userId", user.getUserId()); session.setAttribute("userName", user.getFullName());</code><br>
+                    Redirects browser: <code>response.sendRedirect(request.getContextPath() + "/home");</code><br>
+                    - If <code>user == null</code>: Sets <code>request.setAttribute("error", "Invalid Email or Password");</code> and forwards back to <code>/WEB-INF/views/login.jsp</code>.</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #e11d48;">
+                <div class="node-num" style="background-color:#e11d48;">9</div>
+                <div class="node-content">
+                    <div class="node-title">HomeServlet Handles GET & Renders Home Page</div>
+                    <div class="node-detail">Browser requests <code>/home</code> GET URL. <code>HomeServlet.doGet()</code> fetches categories and products via <code>CategoryDAOImpl</code> & <code>ProductDAOImpl</code>, sets request attributes, and forwards to <code>/WEB-INF/views/home.jsp</code> where the user sees their personalized navbar with <code>${sessionScope.userName}</code>.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 6: FLOW TRACES & SEQUENCE DIAGRAMS FOR MAJOR OPERATIONS -->
+    <div class="section">
+        <div class="section-title">6. Execution Flow Traces for Major Operations</div>
+
+        <!-- OPERATION 1: REGISTRATION -->
+        <div class="section-subtitle">Operation A: User Registration Flow</div>
+        <p style="margin-bottom:4px;">Traces user sign-up validation and database record insertion.</p>
+        <table class="seq-table">
+            <thead>
+                <tr>
+                    <th class="seq-step">Step</th>
+                    <th class="seq-from-to">Caller ➔ Receiver</th>
+                    <th>Exact Class & Method Executed</th>
+                    <th>Action, SQL Query & Object Data Flow</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="seq-step">1</td>
+                    <td class="seq-from-to">User ➔ RegisterServlet</td>
+                    <td><code>RegisterServlet.doPost()</code></td>
+                    <td>Extracts form params (<code>fullName</code>, <code>email</code>, <code>phone</code>, <code>password</code>, <code>address</code>, <code>city</code>, <code>state</code>, <code>pincode</code>).</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">2</td>
+                    <td class="seq-from-to">Servlet ➔ UserDAOImpl</td>
+                    <td><code>UserDAOImpl.emailExists(email)</code></td>
+                    <td>Executes SQL: <span class="sql-tag">SELECT COUNT(*) FROM users WHERE email=?</span>. If count > 0, forwards back to <code>register.jsp</code> with error "Email already registered."</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">3</td>
+                    <td class="seq-from-to">Servlet ➔ UserDAOImpl</td>
+                    <td><code>UserDAOImpl.phoneExists(phone)</code></td>
+                    <td>Executes SQL: <span class="sql-tag">SELECT COUNT(*) FROM users WHERE phone=?</span>. If count > 0, forwards to <code>register.jsp</code> with error "Phone number already registered."</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">4</td>
+                    <td class="seq-from-to">Servlet ➔ POJO Creation</td>
+                    <td><code>new User()</code></td>
+                    <td>Instantiates <code>User</code> POJO and populates fields using setters (<code>setFullName</code>, <code>setEmail</code>, <code>setPhone</code>, etc.).</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">5</td>
+                    <td class="seq-from-to">Servlet ➔ UserDAOImpl</td>
+                    <td><code>UserDAOImpl.registerUser(user)</code></td>
+                    <td>Executes SQL: <span class="sql-tag">INSERT INTO users (full_name, email, phone, password, address, city, state, pincode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)</span> using <code>PreparedStatement</code>.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">6</td>
+                    <td class="seq-from-to">RegisterServlet ➔ Browser</td>
+                    <td><code>response.sendRedirect()</code></td>
+                    <td>If success (<code>executeUpdate() > 0</code>), redirects to <code>/login</code> page. Otherwise forwards to <code>register.jsp</code> with "Registration Failed."</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- OPERATION 2: PRODUCT CATALOG & FILTERING -->
+        <div class="section-subtitle">Operation B: Fetching Products Catalog, Searching & Sorting Flow</div>
+        <p style="margin-bottom:4px;">Traces product catalog browsing, keyword search, category filtering, and price sorting.</p>
+        <table class="seq-table">
+            <thead>
+                <tr>
+                    <th class="seq-step">Step</th>
+                    <th class="seq-from-to">Caller ➔ Receiver</th>
+                    <th>Exact Class & Method Executed</th>
+                    <th>Action, SQL Query & Object Data Flow</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="seq-step">1</td>
+                    <td class="seq-from-to">User ➔ ProductServlet</td>
+                    <td><code>ProductServlet.doGet()</code></td>
+                    <td>Reads URL parameters: <code>String keyword = request.getParameter("keyword");</code>, <code>category</code>, <code>sort</code>.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">2</td>
+                    <td class="seq-from-to">Servlet ➔ ProductDAOImpl</td>
+                    <td>Conditional DAO Dispatch:<br>
+                    - Search: <code>productDAO.searchProducts(keyword)</code><br>
+                    - Category: <code>productDAO.getProductsByCategory(catId)</code><br>
+                    - Low-to-High: <code>productDAO.sortByPriceLowToHigh()</code><br>
+                    - High-to-Low: <code>productDAO.sortByPriceHighToLow()</code><br>
+                    - Latest: <code>productDAO.sortByNewest()</code><br>
+                    - Default: <code>productDAO.getAllProducts()</code></td>
+                    <td>Executes corresponding SQL query:<br>
+                    - <span class="sql-tag">SELECT * FROM products WHERE product_name LIKE ?</span><br>
+                    - <span class="sql-tag">SELECT * FROM products WHERE category_id=?</span><br>
+                    - <span class="sql-tag">SELECT * FROM products ORDER BY price ASC</span><br>
+                    - <span class="sql-tag">SELECT * FROM products ORDER BY price DESC</span><br>
+                    - <span class="sql-tag">SELECT * FROM products ORDER BY created_at DESC</span><br>
+                    - <span class="sql-tag">SELECT * FROM products</span><br>
+                    Maps result set rows to <code>List&lt;Product&gt;</code>.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">3</td>
+                    <td class="seq-from-to">Servlet ➔ CategoryDAOImpl</td>
+                    <td><code>categoryDAO.getAllCategories()</code></td>
+                    <td>Executes SQL: <span class="sql-tag">SELECT * FROM categories ORDER BY category_name</span>. Returns <code>List&lt;Category&gt;</code> for filter sidebar.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">4</td>
+                    <td class="seq-from-to">Servlet ➔ products.jsp</td>
+                    <td><code>request.setAttribute()</code> & <code>forward()</code></td>
+                    <td>Attaches <code>request.setAttribute("products", products);</code> & <code>categories</code>, forwards to <code>/WEB-INF/views/products.jsp</code>. JSP iterates over list using JSTL <code>&lt;c:forEach&gt;</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- OPERATION 3: ADD TO CART -->
+        <div class="section-subtitle">Operation C: Adding Product to Cart Flow</div>
+        <p style="margin-bottom:4px;">Traces session authentication check, cart initialization, variant stock check, and cart item update/insert.</p>
+        <table class="seq-table">
+            <thead>
+                <tr>
+                    <th class="seq-step">Step</th>
+                    <th class="seq-from-to">Caller ➔ Receiver</th>
+                    <th>Exact Class & Method Executed</th>
+                    <th>Action, SQL Query & Object Data Flow</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="seq-step">1</td>
+                    <td class="seq-from-to">User ➔ CartServlet</td>
+                    <td><code>CartServlet.doPost()</code></td>
+                    <td>Verifies session: <code>session.getAttribute("loggedInUser")</code>. Extracts <code>variantId</code> and <code>quantity</code> from HTTP request parameters.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">2</td>
+                    <td class="seq-from-to">Servlet ➔ CartDAOImpl</td>
+                    <td><code>cartDAO.getCartByUserId(userId)</code></td>
+                    <td>Executes SQL: <span class="sql-tag">SELECT * FROM cart WHERE user_id=?</span>. If cart is <code>null</code>, invokes <code>cartDAO.createCart(userId)</code> (<span class="sql-tag">INSERT INTO cart(user_id) VALUES(?)</span>) and re-fetches created Cart object.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">3</td>
+                    <td class="seq-from-to">Servlet ➔ CartItemDAOImpl</td>
+                    <td><code>cartItemDAO.isProductInCart(cartId, variantId)</code></td>
+                    <td>Executes SQL: <span class="sql-tag">SELECT COUNT(*) FROM cart_items WHERE cart_id=? AND variant_id=?</span>.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">4A</td>
+                    <td class="seq-from-to">If Item Exists ➔ DAO</td>
+                    <td><code>cartItemDAO.getCartItem()</code> & <code>updateQuantityByVariant()</code></td>
+                    <td>Fetches existing quantity, adds new quantity, and executes SQL: <span class="sql-tag">UPDATE cart_items SET quantity=? WHERE cart_id=? AND variant_id=?</span>.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">4B</td>
+                    <td class="seq-from-to">If New Item ➔ DAO</td>
+                    <td><code>new CartItem()</code> & <code>cartItemDAO.addToCart(item)</code></td>
+                    <td>Creates <code>CartItem</code> POJO (cartId, variantId, quantity) and executes SQL: <span class="sql-tag">INSERT INTO cart_items(cart_id, variant_id, quantity) VALUES(?,?,?)</span>.</td>
+                </tr>
+                <tr>
+                    <td class="seq-step">5</td>
+                    <td class="seq-from-to">CartServlet ➔ Browser</td>
+                    <td><code>response.sendRedirect()</code></td>
+                    <td>Redirects browser to <code>request.getContextPath() + "/cart"</code>.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 7: CHECKOUT & PLACE ORDER COMPLEX TRANSACTION FLOW -->
+    <div class="section">
+        <div class="section-title">7. Complex Order Placement & Checkout Transaction Trace</div>
+
+        <p>The <strong>Place Order</strong> operation is the most critical workflow in the project. It involves multi-table coordination across 5 DAOs (Cart, CartItem, Order, OrderItem, ProductVariant) to process checkout, verify stock, insert orders, decrease inventory, and clear the cart.</p>
+
+        <div class="section-subtitle">Multi-Step Execution Pipeline in PlaceOrderServlet.doPost()</div>
+
+        <div class="flow-step-container" style="margin-top: 8px;">
+            <div class="flow-node" style="border-left:3.5px solid #2563eb;">
+                <div class="node-num" style="background-color:#2563eb;">1</div>
+                <div class="node-content">
+                    <div class="node-title">Authentication & Cart Retrieval</div>
+                    <div class="node-detail"><code>PlaceOrderServlet</code> verifies user session, gets <code>userId</code>, calls <code>cartDAO.getCartByUserId(userId)</code>, and fetches detailed cart items via <code>cartItemDAO.getCartView(cart.getCartId())</code>.</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #059669;">
+                <div class="node-num" style="background-color:#059669;">2</div>
+                <div class="node-content">
+                    <div class="node-title">Order Total Calculation & Order POJO Creation</div>
+                    <div class="node-detail">Iterates over <code>List&lt;CartView&gt;</code> items, calculates <code>totalAmount = totalAmount.add(item.getSubTotal())</code>. Instantiates <code>new Order()</code> and populates: <code>userId</code>, <code>totalAmount</code>, <code>shippingAddress</code>, <code>paymentMethod</code>, and <code>status = "PLACED"</code>.</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #0284c7;">
+                <div class="node-num" style="background-color:#0284c7;">3</div>
+                <div class="node-content">
+                    <div class="node-title">Insert Master Order Record & Retrieve Generated Key</div>
+                    <div class="node-detail">Calls <code>orderDAO.placeOrder(order)</code>. <code>OrderDAOImpl</code> executes SQL: <span class="sql-tag">INSERT INTO orders(user_id, total_amount, shipping_address, payment_method, status) VALUES(?,?,?,?,?)</span> with <code>Statement.RETURN_GENERATED_KEYS</code>. Returns newly generated <code>order_id</code> (int).</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #d97706;">
+                <div class="node-num" style="background-color:#d97706;">4</div>
+                <div class="node-content">
+                    <div class="node-title">Loop Items: Stock Check, Save OrderItem & Update Inventory Stock</div>
+                    <div class="node-detail">For each <code>CartView</code> item in cart:<br>
+                    a) Checks stock: <code>int availableStock = productVariantDAO.getAvailableStock(item.getVariantId())</code> (<span class="sql-tag">SELECT stock FROM product_variants WHERE variant_id=?</span>). If insufficient, redirects to checkout error.<br>
+                    b) Saves order line item: Instantiates <code>new OrderItem()</code> (orderId, variantId, quantity, price) and calls <code>orderItemDAO.addOrderItem(orderItem)</code> (<span class="sql-tag">INSERT INTO order_items(order_id, variant_id, quantity, price) VALUES(?,?,?,?)</span>).<br>
+                    c) Decrements stock: Calculates <code>newStock = availableStock - item.getQuantity()</code> and calls <code>productVariantDAO.updateStock(variantId, newStock)</code> (<span class="sql-tag">UPDATE product_variants SET stock=? WHERE variant_id=?</span>).</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #0284c7;">
+                <div class="node-num" style="background-color:#0284c7;">5</div>
+                <div class="node-content">
+                    <div class="node-title">Clear Shopping Cart</div>
+                    <div class="node-detail">Calls <code>cartItemDAO.clearCart(cart.getCartId())</code>. Executes SQL: <span class="sql-tag">DELETE FROM cart_items WHERE cart_id=?</span>.</div>
+                </div>
+            </div>
+            <div class="flow-arrow">⬇️</div>
+
+            <div class="flow-node" style="border-left:3.5px solid #e11d48;">
+                <div class="node-num" style="background-color:#e11d48;">6</div>
+                <div class="node-content">
+                    <div class="node-title">Redirect to Order Success Confirmation</div>
+                    <div class="node-detail">Redirects browser: <code>response.sendRedirect(request.getContextPath() + "/order-success?orderId=" + orderId);</code>. <code>OrderSuccessServlet.doGet()</code> loads order details via <code>orderDAO.getOrderById(orderId)</code> and forwards to <code>/WEB-INF/views/order-success.jsp</code>.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 8: QUICK-REFERENCE CHEAT SHEET -->
+    <div class="section">
+        <div class="section-title">8. Quick-Reference Architectural Cheat Sheet</div>
+
+        <p>This reference summary maps every major component, responsibility, dependencies, and key methods for fast interview prep and codebase navigation.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 18%;">Component Category</th>
+                    <th style="width: 22%;">Exact File / Class Name</th>
+                    <th style="width: 24%;">Primary Responsibility</th>
+                    <th style="width: 18%;">Communicates With</th>
+                    <th style="width: 18%;">Key Methods Executed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Authentication Servlet</strong></td>
+                    <td><code>LoginServlet.java</code></td>
+                    <td>Processes user login, sets session attributes</td>
+                    <td><code>UserDAO</code>, <code>login.jsp</code>, <code>home.jsp</code></td>
+                    <td><code>doGet()</code>, <code>doPost()</code>, <code>userDAO.loginUser()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Registration Servlet</strong></td>
+                    <td><code>RegisterServlet.java</code></td>
+                    <td>Validates new user credentials and creates user account</td>
+                    <td><code>UserDAO</code>, <code>register.jsp</code></td>
+                    <td><code>userDAO.emailExists()</code>, <code>phoneExists()</code>, <code>registerUser()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Catalog Servlet</strong></td>
+                    <td><code>ProductServlet.java</code></td>
+                    <td>Fetches, searches, filters, and sorts product listings</td>
+                    <td><code>ProductDAOImpl</code>, <code>CategoryDAOImpl</code>, <code>products.jsp</code></td>
+                    <td><code>searchProducts()</code>, <code>getProductsByCategory()</code>, <code>getAllProducts()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Product Details Servlet</strong></td>
+                    <td><code>ProductDetailsServlet.java</code></td>
+                    <td>Fetches single product details and available size variants</td>
+                    <td><code>ProductDAOImpl</code>, <code>ProductVariantDAOImpl</code></td>
+                    <td><code>getProductById()</code>, <code>getVariantsByProduct()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Cart Servlet</strong></td>
+                    <td><code>CartServlet.java</code></td>
+                    <td>Displays shopping cart items and handles Add-to-Cart POST</td>
+                    <td><code>CartDAO</code>, <code>CartItemDAO</code>, <code>cart.jsp</code></td>
+                    <td><code>getCartByUserId()</code>, <code>getCartView()</code>, <code>addToCart()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Order Processing Servlet</strong></td>
+                    <td><code>PlaceOrderServlet.java</code></td>
+                    <td>Executes checkout transaction, updates stock, clears cart</td>
+                    <td><code>CartDAO</code>, <code>CartItemDAO</code>, <code>OrderDAO</code>, <code>OrderItemDAO</code>, <code>ProductVariantDAO</code></td>
+                    <td><code>placeOrder()</code>, <code>addOrderItem()</code>, <code>updateStock()</code>, <code>clearCart()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Order History Servlet</strong></td>
+                    <td><code>OrdersServlet.java</code></td>
+                    <td>Fetches all past orders for logged-in user</td>
+                    <td><code>OrderDAO</code>, <code>orders.jsp</code></td>
+                    <td><code>getOrdersByUserId()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Order Details Servlet</strong></td>
+                    <td><code>OrderDetailsServlet.java</code></td>
+                    <td>Fetches granular order items and delivery status</td>
+                    <td><code>OrderDAO</code>, <code>OrderItemDAO</code>, <code>order-details.jsp</code></td>
+                    <td><code>getOrderById()</code>, <code>getOrderItemView()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Profile Servlet</strong></td>
+                    <td><code>UpdateProfileServlet.java</code></td>
+                    <td>Updates user phone, shipping address, city, state, pincode</td>
+                    <td><code>UserDAO</code>, <code>profile.jsp</code></td>
+                    <td><code>updateUser()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>User DAO & Impl</strong></td>
+                    <td><code>UserDAO.java</code><br><code>UserDAOImpl.java</code></td>
+                    <td>Executes user SQL queries (select, insert, update, check)</td>
+                    <td><code>DBConnection</code>, <code>users</code> table, <code>User</code> POJO</td>
+                    <td><code>registerUser()</code>, <code>loginUser()</code>, <code>getUserById()</code>, <code>updateUser()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Product DAO & Impl</strong></td>
+                    <td><code>ProductDAO.java</code><br><code>ProductDAOImpl.java</code></td>
+                    <td>Executes product catalog SQL queries and search filters</td>
+                    <td><code>DBConnection</code>, <code>products</code> table, <code>Product</code> POJO</td>
+                    <td><code>getAllProducts()</code>, <code>searchProducts()</code>, <code>sortByPriceLowToHigh()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Cart Item DAO & Impl</strong></td>
+                    <td><code>CartItemDAO.java</code><br><code>CartItemDAOImpl.java</code></td>
+                    <td>Executes cart item SQL joins and calculates cart total</td>
+                    <td><code>DBConnection</code>, <code>cart_items</code> table, <code>CartView</code> POJO</td>
+                    <td><code>getCartView()</code>, <code>getCartTotal()</code>, <code>updateQuantity()</code>, <code>clearCart()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Order DAO & Impl</strong></td>
+                    <td><code>OrderDAO.java</code><br><code>OrderDAOImpl.java</code></td>
+                    <td>Inserts master order record and returns generated order ID</td>
+                    <td><code>DBConnection</code>, <code>orders</code> table, <code>Order</code> POJO</td>
+                    <td><code>placeOrder()</code>, <code>getOrderById()</code>, <code>getOrdersByUserId()</code></td>
+                </tr>
+                <tr>
+                    <td><strong>DB Connection Utility</strong></td>
+                    <td><code>DBConnection.java</code></td>
+                    <td>Loads MySQL driver and establishes JDBC connection</td>
+                    <td><code>java.sql.DriverManager</code>, MySQL Server</td>
+                    <td><code>DBConnection.getConnection()</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer-note">
+            Fashion Store Project Architecture & Code Execution Flow Documentation &bull; Generated for Technical Understanding & Interview Preparation
+        </div>
+    </div>
+
+</body>
+</html>

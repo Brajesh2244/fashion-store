@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Shopping Cart | FashionStore</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/cart.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </a>
+        </div>
+
+        <div class="search-bar">
+            <form action="products.html" method="get" class="search-form">
+                <input type="text" name="keyword" placeholder="Search styles, brands, collections...">
+                <button type="submit" class="search-btn" aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+
+        <button class="mobile-toggle-btn" id="mobileMenuBtn" aria-label="Toggle Navigation Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="products.html" class="nav-link"><i class="fa-solid fa-shirt"></i> Products</a></li>
+            <li>
+                <a href="cart.html" class="nav-link cart-link active">
+                    <i class="fa-solid fa-cart-shopping"></i> Cart
+                    <span class="cart-badge" style="display:none;">0</span>
+                </a>
+            </li>
+            <li><a href="orders.html" class="nav-link"><i class="fa-solid fa-box-archive"></i> Orders</a></li>
+            <li class="user-pill-item">
+                <a href="profile.html" class="user-pill" title="My Profile">
+                    <span class="user-avatar"><i class="fa-solid fa-user"></i></span>
+                    <span class="user-name">Brajesh</span>
+                </a>
+            </li>
+            <li class="theme-toggle-item">
+                <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle Dark Mode" title="Toggle Dark/Light Mode">
+                    <span class="toggle-track">
+                        <i class="fa-solid fa-sun icon-sun"></i>
+                        <i class="fa-solid fa-moon icon-moon"></i>
+                        <span class="toggle-thumb"></span>
+                    </span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <!-- Step Indicator -->
+    <div class="checkout-steps">
+        <div class="step-item active">
+            <span class="step-num">1</span>
+            <span>Shopping Cart</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+            <span class="step-num">2</span>
+            <span>Shipping</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item">
+            <span class="step-num">3</span>
+            <span>Payment</span>
+        </div>
+    </div>
+
+    <h1 class="page-title">Shopping Cart</h1>
+
+    <div id="cartContentArea">
+        <!-- Rendered dynamically via JS -->
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-col brand-col">
+            <div class="footer-logo">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </div>
+            <p class="brand-desc">Elevating your style with curated luxury collections. Crafted with exceptional quality.</p>
+        </div>
+        <div class="footer-col">
+            <h4 class="col-title">Quick Links</h4>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="orders.html">Orders</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="footer-bottom-inner">
+            <p>&copy; 2026 FashionStore Portfolio Showcase. Live Interactive Demo.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+function renderCart() {
+    const area = document.getElementById('cartContentArea');
+    const cart = App.getCart();
+
+    if (!cart || cart.length === 0) {
+        area.innerHTML = `
+            <div class="empty-cart-card">
+                <div class="empty-cart-icon">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </div>
+                <h3>Your Shopping Cart is Empty</h3>
+                <p>Looks like you haven't added anything to your cart yet. Explore our latest arrivals and elevate your wardrobe!</p>
+                <a href="products.html" class="btn btn-primary">
+                    <i class="fa-solid fa-arrow-left"></i> Start Shopping Now
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    const total = App.getCartTotal();
+
+    area.innerHTML = `
+        <div class="cart-layout">
+            <div class="cart-table-card">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Size</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${cart.map(item => `
+                            <tr>
+                                <td>
+                                    <div class="cart-product-info">
+                                        <img src="${item.imageUrl}" class="cart-thumb" alt="${item.name}">
+                                        <div class="cart-details">
+                                            <span class="cart-brand">${item.brand}</span>
+                                            <h4>${item.name}</h4>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="cart-size-pill">${item.size}</span>
+                                </td>
+                                <td>
+                                    <span class="cart-price">₹ ${item.price.toFixed(2)}</span>
+                                </td>
+                                <td>
+                                    <div class="cart-qty-form">
+                                        <input type="number" value="${item.quantity}" min="1" max="10" class="cart-qty-input"
+                                            onchange="updateItemQty(${item.cartItemId}, this.value)">
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="cart-price">₹ ${(item.price * item.quantity).toFixed(2)}</span>
+                                </td>
+                                <td>
+                                    <button onclick="removeItem(${item.cartItemId})" class="cart-delete-btn" title="Remove item">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="summary-card">
+                <h3>Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal (${cart.reduce((c, i) => c + i.quantity, 0)} items)</span>
+                    <span>₹ ${total.toFixed(2)}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Estimated Shipping</span>
+                    <span style="color: var(--color-success); font-weight: 700;">FREE</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax Estimate (GST Incl.)</span>
+                    <span>₹ 0.00</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>Total Amount</span>
+                    <span class="total-amount">₹ ${total.toFixed(2)}</span>
+                </div>
+
+                <a href="checkout.html" class="checkout-action-btn">
+                    <i class="fa-solid fa-lock"></i> Proceed to Checkout
+                </a>
+
+                <a href="products.html" class="continue-shopping-link">
+                    <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+        </div>
+    `;
+}
+
+function updateItemQty(id, qty) {
+    App.updateCartQuantity(id, qty);
+    renderCart();
+}
+
+function removeItem(id) {
+    App.removeFromCart(id);
+    renderCart();
+}
+
+document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Placed Successfully | FashionStore</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=4">
+    <link rel="stylesheet" href="assets/css/order-success.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="header-wrapper">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <span class="logo-icon"><i class="fa-solid fa-bag-shopping"></i></span>
+                <span class="logo-text">Fashion<span class="logo-accent">Store</span></span>
+            </a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="products.html" class="nav-link"><i class="fa-solid fa-shirt"></i> Products</a></li>
+            <li><a href="cart.html" class="nav-link cart-link"><i class="fa-solid fa-cart-shopping"></i> Cart</a></li>
+            <li><a href="orders.html" class="nav-link active"><i class="fa-solid fa-box-archive"></i> Orders</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container success-page-container">
+    <div class="success-card">
+        <div class="success-icon-badge">
+            <i class="fa-solid fa-check"></i>
+        </div>
+
+        <h1 class="success-title">Order Placed Successfully!</h1>
+        <p class="success-subtitle">Thank you for your purchase. We are preparing your order for express dispatch.</p>
+
+        <div class="details-box">
+            <div class="detail-row">
+                <span class="detail-label">Order Reference</span>
+                <span class="detail-value" id="resOrderId">#1001</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Order Placed On</span>
+                <span class="detail-value" id="resOrderDate">Just now</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Payment Method</span>
+                <span class="detail-value" id="resOrderPayment">UPI</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Shipping Address</span>
+                <span class="detail-value" id="resOrderAddress" style="font-size:13px; max-width:280px; text-align:right;">Registered Customer Address</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Current Status</span>
+                <span class="status-badge"><i class="fa-solid fa-circle-check"></i> Confirmed</span>
+            </div>
+            <div class="detail-row total-row">
+                <span class="detail-label">Paid Total Amount</span>
+                <span class="detail-value grand-total-value" id="resOrderTotal">₹ 0.00</span>
+            </div>
+        </div>
+
+        <div class="success-actions">
+            <a href="orders.html" class="btn btn-primary">
+                <i class="fa-solid fa-box-archive"></i> View All Orders
+            </a>
+            <a href="products.html" class="btn btn-secondary">
+                <i class="fa-solid fa-bag-shopping"></i> Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = Number(params.get('orderId'));
+    const orders = App.getOrders();
+    const order = orders.find(o => o.orderId === orderId) || orders[0];
+
+    if (order) {
+        document.getElementById('resOrderId').textContent = `#${order.orderId}`;
+        document.getElementById('resOrderDate').textContent = order.orderDate;
+        document.getElementById('resOrderPayment').textContent = order.paymentMethod;
+        document.getElementById('resOrderAddress').textContent = order.shippingAddress;
+        document.getElementById('resOrderTotal').textContent = `₹ ${Number(order.totalAmount).toFixed(2)}`;
+    }
+});
+</script>
+
+</body>
+</html>
