@@ -13,3 +13,9 @@ bin/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Node / NPM artifacts
+node_modules/
+package.json
+package-lock.json
+.npm_cache/
