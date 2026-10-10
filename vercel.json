@@ -13,6 +13,7 @@
     { "source": "/order-success", "destination": "/order-success.html" },
     { "source": "/orders", "destination": "/orders.html" },
     { "source": "/profile", "destination": "/profile.html" },
+    { "source": "/demo", "destination": "/demo.html" },
     { "source": "/login", "destination": "/login.html" },
     { "source": "/register", "destination": "/register.html" }
   ]
