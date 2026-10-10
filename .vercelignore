@@ -1,0 +1,8 @@
+Dockerfile
+.dockerignore
+pom.xml
+src
+target
+database_setup.sql
+scratch_*.txt
+*.md
